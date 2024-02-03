@@ -1,15 +1,11 @@
 package org.nazar;
 
-import org.nazar.service.ParserService;
-
-import java.io.IOException;
+import org.nazar.service.ParserServiceImpl;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        ParserService parserService = new ParserService();
-        parserService.connect();
-
-
+    public static void main(String[] args) {
+        ParserServiceImpl parserServiceImpl = new ParserServiceImpl();
+        parserServiceImpl.start();
     }
 }
