@@ -5,8 +5,6 @@ Q
 !src/main/java/org/nazar/Main.java,7\4\74576915219531a41d9379b42ff4a8df67e37ebf
 b
 2src/main/java/org/nazar/service/ParserService.java,7\f\7f4b8f49f0874ed4752e54a207d24217a8ddcf04
-a
-1src/main/java/org/nazar/service/EmailService.java,9\7\975c1a3b38e5c7740c6dcf483d56a4ede4282ad9
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -26,3 +24,5 @@ f
 6src/main/java/org/nazar/service/ParserServiceImpl.java,d\2\d2dbc7e3b7a1a478e50bd99295a73f924e15c8db
 l
 <src/main/java/org/nazar/service/NotificationServiceImpl.java,1\8\18961270c7eb450a0f766dbf5155ad61655bc405
+f
+6src/main/java/org/nazar/service/DouParserStrategy.java,7\1\71d793d42c6d009f83dbf7dabd5441e50f02fe8a
