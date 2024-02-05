@@ -51,6 +51,8 @@ public class ParserServiceImpl implements ParserService {
     private void process() throws IOException {
         notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
                 parse(new DouParserStrategy()).toString()));
+        notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
+                parse(new DouParserStrategy()).toString()));
     }
 
 }
