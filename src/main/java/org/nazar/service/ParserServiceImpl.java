@@ -1,5 +1,6 @@
 package org.nazar.service;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -21,9 +22,10 @@ public class ParserServiceImpl implements ParserService {
         Runnable scanner = () -> {
             try {
                 process();
-            } catch (IOException e) {
+                new Robot().mouseMove(1, 1);
+            } catch (IOException | AWTException e) {
                 e.printStackTrace();
-            }
+            } 
         };
         scheduler.scheduleAtFixedRate(scanner, 0, 1, TimeUnit.MINUTES);
     }
@@ -46,7 +48,9 @@ public class ParserServiceImpl implements ParserService {
      */
     private void process() throws IOException {
         notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
-                parse(new DjinniParserStrategy()).toString()));
+                parse(new DouParserStrategy()).toString()));
+        notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
+                parse(new DouParserStrategy()).toString()));
     }
 
 }
