@@ -23,11 +23,9 @@ public class ParserServiceImpl implements ParserService {
             try {
                 process();
                 new Robot().mouseMove(1, 1);
-            } catch (IOException e) {
+            } catch (IOException | AWTException e) {
                 e.printStackTrace();
-            } catch (AWTException e) {
-                e.printStackTrace();
-            }
+            } 
         };
         scheduler.scheduleAtFixedRate(scanner, 0, 1, TimeUnit.MINUTES);
     }
