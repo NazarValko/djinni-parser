@@ -40,7 +40,11 @@ public class EmailStrategy implements NotificationStrategy {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Latest vacancy");
             message.setText(messageBody);
-            Transport.send(message);
+
+            if (messageBody.length() > 2) {
+                Transport.send(message);
+            }
+
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }

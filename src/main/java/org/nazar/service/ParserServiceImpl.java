@@ -22,7 +22,7 @@ public class ParserServiceImpl implements ParserService {
         Runnable scanner = () -> {
             try {
                 process();
-                new Robot().mouseMove(1, 1);
+                new Robot().mouseMove(10, 10);
             } catch (IOException | AWTException e) {
                 e.printStackTrace();
             } 
@@ -50,7 +50,7 @@ public class ParserServiceImpl implements ParserService {
         notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
                 parse(new DouParserStrategy()).toString()));
         notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
-                parse(new DouParserStrategy()).toString()));
+                parse(new DjinniParserStrategy()).toString()));
     }
 
 }
