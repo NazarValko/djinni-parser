@@ -3,6 +3,7 @@ package org.nazar.service;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +25,7 @@ public class ParserServiceImpl implements ParserService {
                 process();
                 new Robot().mouseMove(10, 10);
             } catch (IOException | AWTException e) {
-                e.printStackTrace();
+                System.out.println("Cannot get data");
             } 
         };
         scheduler.scheduleAtFixedRate(scanner, 0, 1, TimeUnit.MINUTES);
@@ -37,8 +38,8 @@ public class ParserServiceImpl implements ParserService {
      * @return a list of strings (links of jobs)
      * @throws IOException if an I/O error occurs during parsing
      */
-    public List<String> parse(ParserStrategy parserStrategy) throws IOException {
-        return parserStrategy.parse();
+    public List<String> parse(ParserStrategy parserStrategy, String url) throws IOException {
+        return parserStrategy.getData(url);
     }
 
     /**
@@ -47,10 +48,14 @@ public class ParserServiceImpl implements ParserService {
      * @throws IOException if an I/O error occurs during processing
      */
     private void process() throws IOException {
-        notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
-                parse(new DouParserStrategy()).toString()));
-        notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com",
-                parse(new DjinniParserStrategy()).toString()));
+        Map<ParserStrategy, String> strategies = Map.of(
+                new DouParserStrategy(), "https://jobs.dou.ua/first-job/",
+                new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
+        );
+        for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
+            String emailBody = parse(entry.getKey(), entry.getValue()).toString();
+            notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com", emailBody));
+        }
     }
 
 }

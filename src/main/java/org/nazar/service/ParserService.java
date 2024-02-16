@@ -20,5 +20,5 @@ public interface ParserService {
      * @return data represented in a list of strings
      * @throws IOException if an error occurs during parsing
      */
-    List<String> parse(ParserStrategy parserStrategy) throws IOException;
+    List<String> parse(ParserStrategy parserStrategy, String url) throws IOException;
 }

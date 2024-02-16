@@ -12,5 +12,5 @@ public interface ParserStrategy {
      * @return  list of strings got from source
      * @throws IOException if an I/O error occurs during parsing
      */
-    List<String> parse() throws IOException;
+    List<String> getData(String url) throws IOException;
 }
