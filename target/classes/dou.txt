@@ -1,0 +1,21 @@
+<html>
+    <body>
+        <ul>
+            <li class="l-vacancy">
+                <div class="title">
+                    <a class="vt" href="https://jobs.dou.ua/job1">Java Developer</a>
+                </div>
+            </li>
+            <li class="l-vacancy">
+                <div class="title">
+                    <a class="vt" href="https://jobs.dou.ua/job2">JavaScript Developer</a>
+                </div>
+            </li>
+            <li class="l-vacancy">
+                <div class="title">
+                    <a class="vt" href="https://jobs.dou.ua/job3">Junior Java Developer</a>
+                </div>
+            </li>
+        </ul>
+    </body>
+</html>

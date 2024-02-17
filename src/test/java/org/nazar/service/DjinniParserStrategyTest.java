@@ -1,8 +1,10 @@
 package org.nazar.service;
 
 import org.junit.jupiter.api.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -15,28 +17,8 @@ class DjinniParserStrategyTest {
      *
      */
     @Test
-    void parseTest() {
-        String html = """
-            <html>
-                <body>
-                    <div class="job-list-item">
-                        <header>
-                            <a class="h3 job-list-item__link" href="/job/java-junior-position-xyz">Java Junior Position XYZ</a>
-                        </header>
-                    </div>
-                    <div class="job-list-item">
-                        <header>
-                            <a class="h3 job-list-item__link" href="/job/java-senior-position-abc">Java Senior Position ABC</a>
-                        </header>
-                    </div>
-                    <div class="job-list-item">
-                        <header>
-                            <a class="h3 job-list-item__link" href="/job/trainee-java-position-def">Trainee Java Position DEF</a>
-                        </header>
-                    </div>
-                </body>
-            </html>
-            """;
+    void parseTest() throws IOException {
+        String html = Files.readString(Paths.get("src/main/resources/djinni.txt"));
         DjinniParserStrategy djinniParserStrategy = new DjinniParserStrategy();
         List<String> actual = djinniParserStrategy.parse(html);
         List<String> expected = List.of("https://djinni.co/job/java-junior-position-xyz", "https://djinni.co/job/trainee-java-position-def");

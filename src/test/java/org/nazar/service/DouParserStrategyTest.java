@@ -1,8 +1,10 @@
 package org.nazar.service;
 
 import org.junit.jupiter.api.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,30 +18,8 @@ class DouParserStrategyTest {
      *
      */
     @Test
-    void parseTest() {
-        String html = """
-                <html>
-                    <body>
-                        <ul>
-                            <li class="l-vacancy">
-                                <div class="title">
-                                    <a class="vt" href="https://jobs.dou.ua/job1">Java Developer</a>
-                                </div>
-                            </li>
-                            <li class="l-vacancy">
-                                <div class="title">
-                                    <a class="vt" href="https://jobs.dou.ua/job2">JavaScript Developer</a>
-                                </div>
-                            </li>
-                            <li class="l-vacancy">
-                                <div class="title">
-                                    <a class="vt" href="https://jobs.dou.ua/job3">Junior Java Developer</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </body>
-                </html>
-                """;
+    void parseTest() throws IOException {
+        String html = Files.readString(Paths.get("src/main/resources/dou.txt"));
         DouParserStrategy douParserStrategy = new DouParserStrategy();
         List<String> actual = douParserStrategy.parse(html);
         List<String> expected = List.of("https://jobs.dou.ua/job1", "https://jobs.dou.ua/job3");
