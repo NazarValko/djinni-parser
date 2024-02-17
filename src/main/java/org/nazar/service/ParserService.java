@@ -10,6 +10,7 @@ public interface ParserService {
 
     /**
      * Start parsing
+     *
      */
     void start();
 
