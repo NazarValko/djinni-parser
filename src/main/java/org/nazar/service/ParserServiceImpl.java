@@ -18,11 +18,13 @@ public class ParserServiceImpl implements ParserService {
 
     /**
      * Starts parsing process
+     *
+     * @param password password from program argument
      */
-    public void start() {
+    public void start(String password) {
         Runnable scanner = () -> {
             try {
-                process();
+                process(password);
                 new Robot().mouseMove(10, 10);
             } catch (IOException | AWTException e) {
                 System.out.println("Cannot get data");
@@ -45,16 +47,17 @@ public class ParserServiceImpl implements ParserService {
     /**
      * Processes the parsing task and sends notifications. Executes every 1 minute
      *
+     * @param password password from program argument
      * @throws IOException if an I/O error occurs during processing
      */
-    private void process() throws IOException {
+    private void process(String password) throws IOException {
         Map<ParserStrategy, String> strategies = Map.of(
                 new DouParserStrategy(), "https://jobs.dou.ua/first-job/",
                 new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             String emailBody = parse(entry.getKey(), entry.getValue()).toString();
-            notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com", emailBody));
+            notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com", emailBody), password);
         }
     }
 

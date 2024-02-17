@@ -28,12 +28,24 @@ public class EmailStrategy implements NotificationStrategy {
 
     /**
      * Sends email
+     * @param password password from program argument
      */
     @Override
-    public void send() {
+    public void send(String password) {
         try {
-            MimeMessage message = new MimeMessage(Session.getDefaultInstance(setProperties(),
-                    authenticate(to, System.getenv("djinni_parser_password"))));
+            MimeMessage message;
+
+            if (password != null) {
+                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
+                        authenticate(to, password)));
+            } else if (System.getProperty("ParserPassword") != null) {
+                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
+                        authenticate(to, System.getProperty("ParserPassword"))));
+            } else {
+                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
+                        authenticate(to, System.getenv("Parser_Password"))));
+            }
+
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Latest vacancy");

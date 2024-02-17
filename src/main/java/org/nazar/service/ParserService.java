@@ -10,8 +10,10 @@ public interface ParserService {
 
     /**
      * Start parsing
+     *
+     * @param password password from program argument
      */
-    void start();
+    void start(String password);
 
     /**
      * Collects data using specified parser strategy

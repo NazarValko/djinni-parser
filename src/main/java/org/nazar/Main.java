@@ -5,6 +5,10 @@ import org.nazar.service.ParserServiceImpl;
 public class Main {
     public static void main(String[] args) {
         ParserServiceImpl parserServiceImpl = new ParserServiceImpl();
-        parserServiceImpl.start();
+        if (args.length > 0) {
+            parserServiceImpl.start(args[0]);
+        } else {
+            parserServiceImpl.start(null);
+        }
     }
 }

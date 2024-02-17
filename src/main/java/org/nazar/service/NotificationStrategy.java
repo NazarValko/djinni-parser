@@ -6,6 +6,7 @@ package org.nazar.service;
 public interface NotificationStrategy {
     /**
      * Sends a notification according to the specific implementation of the strategy.
+     * @param password password from program argument
      */
-    void send();
+    void send(String password);
 }
