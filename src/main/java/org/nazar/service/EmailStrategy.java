@@ -1,7 +1,6 @@
 package org.nazar.service;
 
 import org.nazar.service.smtp.SmtpAuthenticator;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -11,9 +10,9 @@ import java.util.Properties;
  * Strategy for sending email notification
  */
 public class EmailStrategy implements NotificationStrategy {
-    private String from;
-    private String to;
-    private String messageBody;
+    private final String from;
+    private final String to;
+    private final String messageBody;
 
     /**
      *
@@ -35,14 +34,15 @@ public class EmailStrategy implements NotificationStrategy {
         try {
             MimeMessage message = new MimeMessage(Session.getDefaultInstance(setProperties(),
                     authenticate(to, System.getenv("djinni_parser_password"))));
-
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Latest vacancy");
             message.setText(messageBody);
-            Transport.send(message);
+            if (!messageBody.substring(1, messageBody.length()-1).isEmpty()) {
+                Transport.send(message);
+            }
         } catch (MessagingException mex) {
-            mex.printStackTrace();
+            System.out.println("Authentication failed. Provide correct credentials");
         }
     }
 

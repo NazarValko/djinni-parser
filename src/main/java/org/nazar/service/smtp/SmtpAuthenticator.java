@@ -8,8 +8,8 @@ import javax.mail.PasswordAuthentication;
  * Authenticator for SMTP
  */
 public class SmtpAuthenticator extends Authenticator {
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
     /**
      *
@@ -28,6 +28,9 @@ public class SmtpAuthenticator extends Authenticator {
      */
     @Override
     protected PasswordAuthentication getPasswordAuthentication() {
+        if (username == null || password == null) {
+            throw new IllegalArgumentException("Credentials must not be null");
+        }
         return new PasswordAuthentication(username, password);
     }
 }
