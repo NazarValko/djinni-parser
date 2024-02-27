@@ -33,18 +33,9 @@ public class EmailStrategy implements NotificationStrategy {
     @Override
     public void send(String password) {
         try {
-            MimeMessage message;
-
-            if (password != null) {
-                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
+            MimeMessage message = new MimeMessage(Session.getDefaultInstance((Properties) ApplicationProperties
+                            .getInstance(password).getData().get("smtpProps"),
                         authenticate(to, password)));
-            } else if (System.getProperty("ParserPassword") != null) {
-                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
-                        authenticate(to, System.getProperty("ParserPassword"))));
-            } else {
-                message = new MimeMessage(Session.getDefaultInstance(setProperties(),
-                        authenticate(to, System.getenv("Parser_Password"))));
-            }
 
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -69,19 +60,5 @@ public class EmailStrategy implements NotificationStrategy {
         return new SmtpAuthenticator(username, password);
     }
 
-    /**
-     * Provides basic smtp configuration
-     *
-     * @return configured object of Properties class for smtp configuration
-     */
-    private Properties setProperties() {
-        Properties properties = System.getProperties();
 
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        return properties;
-    }
 }
