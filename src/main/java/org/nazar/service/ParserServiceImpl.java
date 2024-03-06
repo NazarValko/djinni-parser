@@ -1,5 +1,7 @@
 package org.nazar.service;
 
+import org.nazar.service.properties.ApplicationProperties;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +20,7 @@ public class ParserServiceImpl implements ParserService {
 
     /**
      * Starts parsing process
+     *
      */
     public void start() {
         Runnable scanner = () -> {
@@ -54,7 +57,8 @@ public class ParserServiceImpl implements ParserService {
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             String emailBody = parse(entry.getKey(), entry.getValue()).toString();
-            notificationService.send(new EmailStrategy("nazar.valko09@gmail.com", "nazarvlk793@gmail.com", emailBody));
+            notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getData().get("senderEmail"),
+                    (String) ApplicationProperties.INSTANCE.getData().get("receiverEmail"), emailBody));
         }
     }
 
