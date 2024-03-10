@@ -1,5 +1,8 @@
 package org.nazar.service;
 
+import org.nazar.service.notification.NotificationService;
+import org.nazar.service.notification.NotificationServiceImpl;
+import org.nazar.service.notification.strategy.EmailStrategy;
 import org.nazar.service.properties.ApplicationProperties;
 
 import java.awt.*;

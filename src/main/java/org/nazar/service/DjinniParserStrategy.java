@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.nazar.service.util.ResultDataHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ public class DjinniParserStrategy implements ParserStrategy {
                 }
             }
         }
-        return resultLinks;
+        return ResultDataHelper.checkIfExistsInFileIfNoAdd(resultLinks, "djinni.txt");
     }
 
     /**
