@@ -9,8 +9,11 @@ import java.util.List;
 public interface ParserStrategy {
     /**
      * Parses data from web page
-     * @return  list of strings got from source
+     *
+     * @return list of strings got from source
      * @throws IOException if an I/O error occurs during parsing
      */
     List<String> getData(String url) throws IOException;
+
+    String getFileName();
 }
