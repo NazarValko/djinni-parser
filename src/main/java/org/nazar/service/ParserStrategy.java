@@ -15,5 +15,10 @@ public interface ParserStrategy {
      */
     List<String> getData(String url) throws IOException;
 
+    /**
+     * Get filename where unique data will be stored
+     *
+     * @return name of file
+     */
     String getFileName();
 }

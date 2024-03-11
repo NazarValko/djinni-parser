@@ -55,6 +55,11 @@ public class DjinniParserStrategy implements ParserStrategy {
         return parse(Jsoup.connect(url).get().html());
     }
 
+    /**
+     * Get name of file where new data from Djinni will be stored
+     *
+     * @return name of file
+     */
     @Override
     public String getFileName() {
         return "djinni.txt";

@@ -53,6 +53,11 @@ public class DouParserStrategy implements ParserStrategy {
         return parse(Jsoup.connect(url).get().html());
     }
 
+    /**
+     * Get name of file where new data from Dou will be stored
+     *
+     * @return name of file
+     */
     @Override
     public String getFileName() {
         return "dou.txt";
