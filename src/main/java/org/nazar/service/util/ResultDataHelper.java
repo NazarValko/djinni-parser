@@ -3,9 +3,11 @@ package org.nazar.service.util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,8 +76,10 @@ public class ResultDataHelper {
                 Files.createFile(path);
             } catch (IOException e) {
                 System.out.println("Cannot create file.");
+                return List.of();
             }
         }
+
         List<String> dataFromFile = readData(filePath);
 
         List<String> newData = filterData(parsedData, dataFromFile);
