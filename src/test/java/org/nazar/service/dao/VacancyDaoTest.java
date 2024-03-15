@@ -1,12 +1,11 @@
-package org.nazar.service.util;
+package org.nazar.service.dao;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nazar.service.ParserServiceImpl;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,9 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for ResultDataHelper class
  */
-public class ResultDataHelperTest {
+public class VacancyDaoTest {
     private static final String FILE_PATH = "src/test/resources/testData.txt";
     private static final Path PATH = Paths.get(FILE_PATH);
+
 
     /**
      * Create file for testing
@@ -46,17 +46,13 @@ public class ResultDataHelperTest {
     /**
      * Tests whether data was written successfully
      *
-     * @throws NoSuchMethodException when occurs
-     * @throws InvocationTargetException when occurs
-     * @throws IllegalAccessException when occurs
      * @throws IOException when occurs
      */
     @Test
-    void writeDataTest_IfSucceed_ThenDataShouldBeWritten() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
+    void writeDataTest_IfSucceed_ThenDataShouldBeWritten() throws IOException {
         List<String> content = List.of("Data3", "Data4");
-        Method method = ResultDataHelper.class.getDeclaredMethod("writeData", List.class, String.class);
-        method.setAccessible(true);
-        method.invoke(null, content, FILE_PATH);
+        VacancyDao vacancyDao = new VacancyDao();
+        vacancyDao.writeData(content, FILE_PATH);
         assertTrue(Files.exists(PATH), "File should exist after writeData.");
 
         List<String> expected = List.of("Data1", "Data2", "Data3", "Data4");
@@ -71,7 +67,8 @@ public class ResultDataHelperTest {
     @Test
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
         List<String> expected = List.of("Data1", "Data2");
-        List<String> actual = ResultDataHelper.readData(FILE_PATH);
+        VacancyDao vacancyDao = new VacancyDao();
+        List<String> actual = vacancyDao.readData(FILE_PATH);
         assertEquals(expected, actual);
     }
 
@@ -82,7 +79,8 @@ public class ResultDataHelperTest {
     @Test
     void readDataTest_IfFail_ThenEmptyListShouldBeReturned() {
         String nonExistentFilePath = "src/test/resources/nonExistentFile.txt";
-        List<String> actual = ResultDataHelper.readData(nonExistentFilePath);
+        VacancyDao vacancyDao = new VacancyDao();
+        List<String> actual = vacancyDao.readData(nonExistentFilePath);
         assertTrue(actual.isEmpty());
     }
 
@@ -100,7 +98,8 @@ public class ResultDataHelperTest {
         Files.write(temp, initialFileContent);
 
         List<String> parsedData = List.of("Data1", "Data3", "Data6");
-        List<String> newData = ResultDataHelper.checkIfExistsInFileIfNoAdd(parsedData, "testData.txt");
+        ParserServiceImpl parserService = new ParserServiceImpl();
+        List<String> newData = parserService.checkIfExistsInFileIfNoAdd(parsedData, "testData.txt");
         List<String> expectedNewData = List.of("Data3", "Data6");
         assertEquals(expectedNewData, newData);
 
@@ -125,7 +124,8 @@ public class ResultDataHelperTest {
         Files.write(temp, initialFileContent);
 
         List<String> parsedData = List.of("Data1", "Data2");
-        List<String> newData = ResultDataHelper.checkIfExistsInFileIfNoAdd(parsedData, "testData.txt");
+        ParserServiceImpl parserService = new ParserServiceImpl();
+        List<String> newData = parserService.checkIfExistsInFileIfNoAdd(parsedData, "testData.txt");
 
         assertTrue(newData.isEmpty());
 
