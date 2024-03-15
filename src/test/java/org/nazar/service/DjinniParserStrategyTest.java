@@ -18,7 +18,7 @@ class DjinniParserStrategyTest {
      */
     @Test
     void parseTest() throws IOException {
-        String html = Files.readString(Paths.get("src/main/resources/djinni.txt"));
+        String html = Files.readString(Paths.get("src/test/resources/djinni.txt"));
         DjinniParserStrategy djinniParserStrategy = new DjinniParserStrategy();
         List<String> actual = djinniParserStrategy.parse(html);
         List<String> expected = List.of("https://djinni.co/job/java-junior-position-xyz", "https://djinni.co/job/trainee-java-position-def");

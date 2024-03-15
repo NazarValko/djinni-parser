@@ -93,7 +93,9 @@ public class ResultDataHelperTest {
      */
     @Test
     void checkIfExistsInFileIfNoAddTest_IfSucceed_ThenNewDataShouldBeAdded() throws IOException {
-        Path temp = Paths.get("src/main/resources/data/testData.txt");
+        Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
+        Files.createDirectories(temp.getParent());
+
         List<String> initialFileContent = List.of("Data1", "Data2");
         Files.write(temp, initialFileContent);
 
@@ -116,7 +118,9 @@ public class ResultDataHelperTest {
      */
     @Test
     void checkIfExistsInFileIfNoAddTest_IfFail_ThenDataIsNotAdded() throws IOException {
-        Path temp = Paths.get("src/main/resources/data/testData.txt");
+        Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
+        Files.createDirectories(temp.getParent());
+
         List<String> initialFileContent = List.of("Data1", "Data2");
         Files.write(temp, initialFileContent);
 

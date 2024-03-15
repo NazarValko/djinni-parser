@@ -3,11 +3,9 @@ package org.nazar.service.util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +23,9 @@ public class ResultDataHelper {
      */
     private static void writeData(List<String> data, String filePath) {
         try {
-            Files.write(Paths.get(filePath), data, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            Path path = Paths.get(filePath);
+            createDirectoryIfNotExists(path);
+            Files.write(path, data, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("Cannot resolve path: " + e.getMessage());
         }
@@ -69,8 +69,15 @@ public class ResultDataHelper {
      * @return unique list of data
      */
     public static List<String> checkIfExistsInFileIfNoAdd(List<String> parsedData, String filename) {
-        String filePath = "src/main/resources/data/" + filename;
+        String filePath = "src/main/resources/parsedLinks/" + filename;
         Path path = Paths.get(filePath);
+
+        try {
+            createDirectoryIfNotExists(path);
+        } catch (IOException e) {
+            return List.of();
+        }
+
         if(!Files.exists(path)) {
             try {
                 Files.createFile(path);
@@ -88,6 +95,19 @@ public class ResultDataHelper {
             writeData(newData, filePath);
         }
         return newData;
+    }
+
+    /**
+     * If given directory does not exist, creates it.
+     *
+     * @param path the file path
+     * @throws IOException if an I/O error occurs
+     */
+    private static void createDirectoryIfNotExists(Path path) throws IOException {
+        Path directoryPath = path.getParent();
+        if (directoryPath != null && !Files.exists(directoryPath)) {
+            Files.createDirectories(directoryPath);
+        }
     }
 
 }
