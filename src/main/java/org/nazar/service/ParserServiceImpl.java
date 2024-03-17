@@ -9,9 +9,6 @@ import org.nazar.service.dao.VacancyFileDao;
 
 import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,17 +51,6 @@ public class ParserServiceImpl implements ParserService {
         return parserStrategy.getData(url);
     }
 
-    /**
-     * Get unique result of parsed data. Write new data to file.
-     *
-     * @param parserStrategy strategy type of parsing
-     * @param url            url of page
-     * @return unique result
-     * @throws IOException if occurs throw new exception
-     */
-    public List<String> getUniqueResultAndSave(ParserStrategy parserStrategy, String url) throws IOException {
-        return checkIfExistsInFileIfNoAdd(parse(parserStrategy, url), parserStrategy.getFileName());
-    }
 
     /**
      * Processes the parsing task and sends notifications. Executes every 1 minute
@@ -77,57 +63,35 @@ public class ParserServiceImpl implements ParserService {
                 new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
-            String emailBody = getUniqueResultAndSave(entry.getKey(), entry.getValue()).toString();
+            ParserStrategy parserStrategy = entry.getKey();
+            String url = entry.getValue();
+
+            List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
             notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getApplicationProperties().get("senderEmail"),
-                    (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), emailBody));
+                    (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), newVacancies.toString()));
         }
     }
 
-    /**
-     * If given directory does not exist, creates it.
-     *
-     * @param path the file path
-     * @throws IOException if an I/O error occurs
-     */
-    private void createDirectoryIfNotExists(Path path) throws IOException {
-        Path directoryPath = path.getParent();
-        if (directoryPath != null && !Files.exists(directoryPath)) {
-            Files.createDirectories(directoryPath);
-        }
-    }
+
 
     /**
      * Checks whether data exists in file. If not - add, then return unique data
      *
      * @param parsedData data from parser
-     * @param filename name of file to be written
+     * @param resourceId id or parsed resourced
      * @return unique list of data
      */
-    private List<String> checkIfExistsInFileIfNoAdd(List<String> parsedData, String filename) {
-        String filePath = "src/main/resources/parsedLinks/" + filename;
-        Path path = Paths.get(filePath);
-
-        try {
-            createDirectoryIfNotExists(path);
-        } catch (IOException e) {
-            return List.of();
-        }
-
-        if(!Files.exists(path)) {
-            try {
-                Files.createFile(path);
-            } catch (IOException e) {
-                System.out.println("Cannot create file.");
-                return List.of();
-            }
-        }
-
-        List<String> dataFromFile = vacancyDaoImpl.read(filePath);
-
+    private List<String> getNewVacancies(List<String> parsedData, String resourceId) {
+        List<String> dataFromFile = vacancyDaoImpl.read(resourceId);
         List<String> newData = filterData(parsedData, dataFromFile);
 
         if (!newData.isEmpty()) {
-            vacancyDaoImpl.write(newData, filePath);
+            try {
+                vacancyDaoImpl.write(newData, resourceId);
+            } catch (IOException e) {
+                System.out.println(e);
+                return List.of();
+            }
         }
         return newData;
     }

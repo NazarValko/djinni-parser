@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for ResultDataHelper class
  */
 public class VacancyFileDaoTest {
-    private static final String FILE_PATH = "src/test/resources/testData.txt";
-    private static final Path PATH = Paths.get(FILE_PATH);
+    private static final Path TEST_FILE_PATH = Paths.get("src/main/resources/parsedLinks/testData.txt");
 
 
     /**
@@ -27,9 +26,13 @@ public class VacancyFileDaoTest {
      * @throws IOException when occurs
      */
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() {
         List<String> initialContent = List.of("Data1", "Data2");
-        Files.write(PATH, initialContent);
+        try {
+            Files.write(TEST_FILE_PATH, initialContent);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -39,7 +42,7 @@ public class VacancyFileDaoTest {
      */
     @AfterEach
     public void tearDown() throws IOException {
-        Files.deleteIfExists(PATH);
+        Files.deleteIfExists(TEST_FILE_PATH);
     }
 
     /**
@@ -51,11 +54,11 @@ public class VacancyFileDaoTest {
     void writeDataTest_IfSucceed_ThenDataShouldBeWritten() throws IOException {
         List<String> content = List.of("Data3", "Data4");
         VacancyFileDao vacancyFileDao = new VacancyFileDao();
-        vacancyFileDao.write(content, FILE_PATH);
-        assertTrue(Files.exists(PATH), "File should exist after writeData.");
+        vacancyFileDao.write(content, "testData");
+        assertTrue(Files.exists(TEST_FILE_PATH), "File should exist after writeData.");
 
         List<String> expected = List.of("Data1", "Data2", "Data3", "Data4");
-        List<String> actual = Files.readAllLines(PATH);
+        List<String> actual = Files.readAllLines(TEST_FILE_PATH);
         assertEquals(expected, actual);
     }
 
@@ -67,7 +70,7 @@ public class VacancyFileDaoTest {
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
         List<String> expected = List.of("Data1", "Data2");
         VacancyFileDao vacancyFileDao = new VacancyFileDao();
-        List<String> actual = vacancyFileDao.read(FILE_PATH);
+        List<String> actual = vacancyFileDao.read("testData");
         assertEquals(expected, actual);
     }
 

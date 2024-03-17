@@ -21,7 +21,7 @@ public class ParserServiceImplTest {
      * @throws IOException when occurs
      */
     @Test
-    void checkIfExistsInFileIfNoAddTest_IfSucceed_ThenNewDataShouldBeAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void getNewVacanciesTest_IfSucceed_ThenNewDataShouldBeAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
         Files.createDirectories(temp.getParent());
 
@@ -30,9 +30,9 @@ public class ParserServiceImplTest {
 
         List<String> parsedData = List.of("Data1", "Data3", "Data6");
         ParserServiceImpl parserService = new ParserServiceImpl();
-        Method method = ParserServiceImpl.class.getDeclaredMethod("checkIfExistsInFileIfNoAdd", List.class, String.class);
+        Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
-        List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData.txt");
+        List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");
         List<String> expectedNewData = List.of("Data3", "Data6");
         assertEquals(expectedNewData, newData);
 
@@ -49,7 +49,7 @@ public class ParserServiceImplTest {
      * @throws IOException when occurs
      */
     @Test
-    void checkIfExistsInFileIfNoAddTest_IfFail_ThenDataIsNotAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void getNewVacanciesTest_IfFail_ThenDataIsNotAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
         Files.createDirectories(temp.getParent());
 
@@ -58,9 +58,9 @@ public class ParserServiceImplTest {
 
         List<String> parsedData = List.of("Data1", "Data2");
         ParserServiceImpl parserService = new ParserServiceImpl();
-        Method method = ParserServiceImpl.class.getDeclaredMethod("checkIfExistsInFileIfNoAdd", List.class, String.class);
+        Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
-        List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData.txt");
+        List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");
 
         assertTrue(newData.isEmpty());
 

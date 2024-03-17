@@ -56,12 +56,12 @@ public class DjinniParserStrategy implements ParserStrategy {
     }
 
     /**
-     * Get name of file where new data from Djinni will be stored
+     * Get Djinni's id
      *
-     * @return name of file
+     * @return id
      */
     @Override
-    public String getFileName() {
-        return "djinni.txt";
+    public String getResourceId() {
+        return "djinni";
     }
 }

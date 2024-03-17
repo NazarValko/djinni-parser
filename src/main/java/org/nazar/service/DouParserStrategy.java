@@ -54,12 +54,12 @@ public class DouParserStrategy implements ParserStrategy {
     }
 
     /**
-     * Get name of file where new data from Dou will be stored
+     * Get Dou's id
      *
-     * @return name of file
+     * @return id
      */
     @Override
-    public String getFileName() {
-        return "dou.txt";
+    public String getResourceId() {
+        return "dou";
     }
 }

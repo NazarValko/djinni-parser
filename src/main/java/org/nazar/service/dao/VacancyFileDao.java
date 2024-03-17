@@ -17,26 +17,49 @@ public class VacancyFileDao implements VacancyDao {
      * Writes data represented in list of strings to file in data directory
      *
      * @param parsedLinks data got from parser
-     * @param filePath path to file
+     * @param resourceId  id of parsed resource
      */
-    public void write(List<String> parsedLinks, String filePath) {
-        try {
-            Path path = Paths.get(filePath);
-            Files.write(path, parsedLinks, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            System.out.println("Cannot resolve path: " + e.getMessage());
+    public void write(List<String> parsedLinks, String resourceId) throws IOException {
+        Path path = getFilePath(resourceId);
+        Files.write(path, parsedLinks, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+    }
+
+    private Path getFilePath(String resourceId) throws IOException {
+        String filePath = "src/main/resources/parsedLinks/" + resourceId + ".txt";
+        Path path = Paths.get(filePath);
+
+        createDirectoryIfNotExists(path);
+
+        if (!Files.exists(path)) {
+            Files.createFile(path);
+        }
+        return Paths.get(filePath);
+    }
+
+    /**
+     * If given directory does not exist, creates it.
+     *
+     * @param path the file path
+     * @throws IOException if an I/O error occurs
+     */
+    private void createDirectoryIfNotExists(Path path) throws IOException {
+        Path directoryPath = path.getParent();
+        if (directoryPath != null && !Files.exists(directoryPath)) {
+            Files.createDirectories(directoryPath);
         }
     }
 
     /**
      * Read data from file. If there is no data returns empty line
      *
-     * @param pathToFile path to file
+     * @param resourceId  id of parsed resource
      * @return contents of file in list of strings format
      */
-    public List<String> read(String pathToFile) {
+    public List<String> read(String resourceId) {
+        Path filePath = Paths.get("src/main/resources/parsedLinks/" + resourceId + ".txt");
+
         try {
-            return Files.readAllLines(Paths.get(pathToFile), StandardCharsets.UTF_8);
+            return Files.readAllLines(filePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Error during read file");
             return List.of();

@@ -1,5 +1,6 @@
 package org.nazar.service.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -11,15 +12,15 @@ public interface VacancyDao {
      * Writes parsed links to source
      *
      * @param parsedLinks links from site
-     * @param filePath path to source
+     * @param resourceId id of parsed resource
      */
-    void write(List<String> parsedLinks, String filePath);
+    void write(List<String> parsedLinks, String resourceId) throws IOException;
 
     /**
      * Read parsed links from source
      *
-     * @param pathToFile path where links are collected
+     * @param resourceId id of parsed resource
      * @return return parsed links from source
      */
-    List<String> read(String pathToFile);
+    List<String> read(String resourceId);
 }
