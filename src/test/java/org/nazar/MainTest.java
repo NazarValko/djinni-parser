@@ -17,7 +17,7 @@ public class MainTest {
     @Test
     void mainTest() {
         Main.main(new String[]{"password"});
-        assertEquals("password", ApplicationProperties.INSTANCE.getData().get("receiverPassword"));
+        assertEquals("password", ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"));
     }
 
     /**
@@ -47,7 +47,7 @@ public class MainTest {
         try {
             System.setProperty("ParserPassword", "password");
             Main.main(new String[]{});
-            assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getData().get("receiverPassword"));
+            assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"));
         } finally {
             if (originalPassword != null) {
                 System.setProperty("ParserPassword", originalPassword);

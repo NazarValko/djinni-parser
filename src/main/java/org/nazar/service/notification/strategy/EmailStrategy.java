@@ -39,8 +39,8 @@ public class EmailStrategy implements NotificationStrategy {
     public void send() {
         try {
             MimeMessage message = new MimeMessage(Session.getDefaultInstance((Properties) ApplicationProperties
-                            .INSTANCE.getData().get("smtpProps"),
-                        authenticate(to, (String) ApplicationProperties.INSTANCE.getData().get("receiverPassword"))));
+                            .INSTANCE.getApplicationProperties().get("smtpProps"),
+                        authenticate(to, (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"))));
 
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));

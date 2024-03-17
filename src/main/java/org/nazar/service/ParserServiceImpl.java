@@ -1,10 +1,11 @@
 package org.nazar.service;
 
+import org.nazar.service.dao.VacancyDao;
 import org.nazar.service.notification.NotificationService;
 import org.nazar.service.notification.NotificationServiceImpl;
 import org.nazar.service.notification.strategy.EmailStrategy;
 import org.nazar.service.properties.ApplicationProperties;
-import org.nazar.service.dao.VacancyDao;
+import org.nazar.service.dao.VacancyFileDao;
 
 import java.awt.*;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ParserServiceImpl implements ParserService {
     private final NotificationService notificationService = new NotificationServiceImpl();
-    private final VacancyDao vacancyDao = new VacancyDao();
+    private final VacancyDao vacancyDaoImpl = new VacancyFileDao();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
@@ -77,8 +78,8 @@ public class ParserServiceImpl implements ParserService {
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             String emailBody = getUniqueResultAndSave(entry.getKey(), entry.getValue()).toString();
-            notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getData().get("senderEmail"),
-                    (String) ApplicationProperties.INSTANCE.getData().get("receiverEmail"), emailBody));
+            notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getApplicationProperties().get("senderEmail"),
+                    (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), emailBody));
         }
     }
 
@@ -102,7 +103,7 @@ public class ParserServiceImpl implements ParserService {
      * @param filename name of file to be written
      * @return unique list of data
      */
-    public List<String> checkIfExistsInFileIfNoAdd(List<String> parsedData, String filename) {
+    private List<String> checkIfExistsInFileIfNoAdd(List<String> parsedData, String filename) {
         String filePath = "src/main/resources/parsedLinks/" + filename;
         Path path = Paths.get(filePath);
 
@@ -121,12 +122,12 @@ public class ParserServiceImpl implements ParserService {
             }
         }
 
-        List<String> dataFromFile = vacancyDao.readData(filePath);
+        List<String> dataFromFile = vacancyDaoImpl.read(filePath);
 
         List<String> newData = filterData(parsedData, dataFromFile);
 
         if (!newData.isEmpty()) {
-            vacancyDao.writeData(newData, filePath);
+            vacancyDaoImpl.write(newData, filePath);
         }
         return newData;
     }
@@ -138,7 +139,7 @@ public class ParserServiceImpl implements ParserService {
      * @param dataFromFile read data from file
      * @return unique data represented in list of strings
      */
-    public List<String> filterData(List<String> parsedData, List<String> dataFromFile) {
+    private List<String> filterData(List<String> parsedData, List<String> dataFromFile) {
         Set<String> linesFromFileSet = new HashSet<>(dataFromFile);
 
         return parsedData.stream()

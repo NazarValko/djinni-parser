@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public enum ApplicationProperties {
     INSTANCE;
-    private final Map<String, Object> data = new HashMap<>();
+    private final Map<String, Object> applicationProperties = new HashMap<>();
 
     /**
      * Provides basic smtp configuration
@@ -24,7 +24,7 @@ public enum ApplicationProperties {
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
 
-        data.put("smtpProps", properties);
+        applicationProperties.put("smtpProps", properties);
     }
 
     /**
@@ -32,8 +32,8 @@ public enum ApplicationProperties {
      *
      */
     private void setEmails() {
-        data.put("senderEmail", "nazar.valko09@gmail.com");
-        data.put("receiverEmail", "nazarvlk793@gmail.com");
+        applicationProperties.put("senderEmail", "nazar.valko09@gmail.com");
+        applicationProperties.put("receiverEmail", "nazarvlk793@gmail.com");
     }
 
     /**
@@ -44,11 +44,11 @@ public enum ApplicationProperties {
     private void setPassword(String passwordForGmail) {
         String propName = "receiverPassword";
         if (passwordForGmail != null) {
-            data.put(propName, passwordForGmail);
+            applicationProperties.put(propName, passwordForGmail);
         } else if (System.getProperty("ParserPassword") != null) {
-            data.put(propName, System.getProperty("ParserPassword"));
+            applicationProperties.put(propName, System.getProperty("ParserPassword"));
         } else {
-            data.put(propName, System.getenv("Parser_Password"));
+            applicationProperties.put(propName, System.getenv("Parser_Password"));
         }
     }
 
@@ -57,7 +57,7 @@ public enum ApplicationProperties {
      *
      * @param passwordForGmail password for receiver gmail
      */
-    public void setData(String passwordForGmail) {
+    public void setApplicationProperties(String passwordForGmail) {
         setSmtpProperties();
         setEmails();
         setPassword(passwordForGmail);
@@ -68,8 +68,8 @@ public enum ApplicationProperties {
      *
      * @return program data
      */
-    public Map<String, Object> getData() {
-        return data;
+    public Map<String, Object> getApplicationProperties() {
+        return applicationProperties;
     }
 
 }
