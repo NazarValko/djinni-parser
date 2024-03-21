@@ -19,7 +19,7 @@ class DouParserStrategyTest {
      */
     @Test
     void parseTest() throws IOException {
-        String html = Files.readString(Paths.get("src/main/resources/dou.txt"));
+        String html = Files.readString(Paths.get("src/test/resources/dou.txt"));
         DouParserStrategy douParserStrategy = new DouParserStrategy();
         List<String> actual = douParserStrategy.parse(html);
         List<String> expected = List.of("https://jobs.dou.ua/job1", "https://jobs.dou.ua/job3");

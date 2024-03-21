@@ -1,4 +1,6 @@
-package org.nazar.service;
+package org.nazar.service.notification;
+
+import org.nazar.service.notification.strategy.NotificationStrategy;
 
 /**
  * Defines the contract for notification services.

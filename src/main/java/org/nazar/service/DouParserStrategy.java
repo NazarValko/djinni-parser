@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +51,15 @@ public class DouParserStrategy implements ParserStrategy {
     @Override
     public List<String> getData(String url) throws IOException {
         return parse(Jsoup.connect(url).get().html());
+    }
+
+    /**
+     * Get Dou's id
+     *
+     * @return id
+     */
+    @Override
+    public String getResourceId() {
+        return "dou";
     }
 }

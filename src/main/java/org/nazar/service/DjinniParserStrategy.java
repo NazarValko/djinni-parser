@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +53,15 @@ public class DjinniParserStrategy implements ParserStrategy {
      */
     public List<String> getData(String url) throws IOException {
         return parse(Jsoup.connect(url).get().html());
+    }
+
+    /**
+     * Get Djinni's id
+     *
+     * @return id
+     */
+    @Override
+    public String getResourceId() {
+        return "djinni";
     }
 }

@@ -7,9 +7,9 @@ public class Main {
     public static void main(String[] args) {
         ParserServiceImpl parserServiceImpl = new ParserServiceImpl();
         if (args == null || args.length == 0) {
-            ApplicationProperties.INSTANCE.setData(null);
+            ApplicationProperties.INSTANCE.setApplicationProperties(null);
         } else {
-            ApplicationProperties.INSTANCE.setData(args[0]);
+            ApplicationProperties.INSTANCE.setApplicationProperties(args[0]);
         }
 
         parserServiceImpl.start();

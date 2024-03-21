@@ -1,4 +1,4 @@
-package org.nazar.service;
+package org.nazar.service.notification.strategy;
 
 /**
  * Defines a strategy for sending notifications
