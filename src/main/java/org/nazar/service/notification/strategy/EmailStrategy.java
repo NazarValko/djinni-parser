@@ -10,6 +10,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.awt.*;
 import java.util.Properties;
 
 /**
@@ -48,10 +49,19 @@ public class EmailStrategy implements NotificationStrategy {
             message.setText(messageBody);
             if (!messageBody.substring(1, messageBody.length()-1).isEmpty()) {
                 Transport.send(message);
+                makeSound();
             }
         } catch (MessagingException mex) {
             System.out.println("Authentication failed. Provide correct credentials");
         }
+    }
+
+    /**
+     * Make sound after links will be sent
+     */
+    @Override
+    public void makeSound() {
+        Toolkit.getDefaultToolkit().beep();
     }
 
     /**
@@ -64,6 +74,7 @@ public class EmailStrategy implements NotificationStrategy {
     private Authenticator authenticate(String username, String password) {
         return new SmtpAuthenticator(username, password);
     }
+
 
 
 }
