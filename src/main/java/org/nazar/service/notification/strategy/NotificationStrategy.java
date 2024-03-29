@@ -9,8 +9,4 @@ public interface NotificationStrategy {
      */
     void send();
 
-    /**
-     * Makes a sound after the links have been sent to the email
-     */
-    void makeSound();
 }

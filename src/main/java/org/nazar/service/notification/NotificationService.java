@@ -12,4 +12,9 @@ public interface NotificationService {
      * @param strategy the specified strategy for notification
      */
     void send(NotificationStrategy strategy);
+
+    /**
+     * Makes a sound after the links have been sent to the email
+     */
+    void makeSound();
 }

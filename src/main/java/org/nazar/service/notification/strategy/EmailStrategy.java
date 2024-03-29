@@ -49,19 +49,10 @@ public class EmailStrategy implements NotificationStrategy {
             message.setText(messageBody);
             if (!messageBody.substring(1, messageBody.length()-1).isEmpty()) {
                 Transport.send(message);
-                makeSound();
             }
         } catch (MessagingException mex) {
             System.out.println("Authentication failed. Provide correct credentials");
         }
-    }
-
-    /**
-     * Make sound after links will be sent
-     */
-    @Override
-    public void makeSound() {
-        Toolkit.getDefaultToolkit().beep();
     }
 
     /**

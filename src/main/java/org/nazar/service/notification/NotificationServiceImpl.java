@@ -2,6 +2,8 @@ package org.nazar.service.notification;
 
 import org.nazar.service.notification.strategy.NotificationStrategy;
 
+import java.awt.*;
+
 /**
  * Implementation of NotificationService to send notifications
  */
@@ -14,5 +16,13 @@ public class NotificationServiceImpl implements NotificationService {
      */
     public void send(NotificationStrategy strategy) {
         strategy.send();
+    }
+
+    /**
+     * Make sound after links will be sent
+     */
+    @Override
+    public void makeSound() {
+        Toolkit.getDefaultToolkit().beep();
     }
 }
