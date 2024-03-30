@@ -69,6 +69,7 @@ public class ParserServiceImpl implements ParserService {
             List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
             notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getApplicationProperties().get("senderEmail"),
                     (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), newVacancies.toString()));
+            notificationService.makeSound();
         }
     }
 

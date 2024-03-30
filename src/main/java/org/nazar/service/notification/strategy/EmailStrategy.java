@@ -10,6 +10,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.awt.*;
 import java.util.Properties;
 
 /**
@@ -64,6 +65,7 @@ public class EmailStrategy implements NotificationStrategy {
     private Authenticator authenticate(String username, String password) {
         return new SmtpAuthenticator(username, password);
     }
+
 
 
 }
