@@ -9,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for Main class
  */
-public class MainTest {
+public class ParserApplicationTest {
 
     /**
      * Test when command line arguments(password) is passed then it should be added to properties map
      */
     @Test
     void mainTest() {
-        Main.main(new String[]{"password"});
-        assertEquals("password", ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"));
+        ParserApplication.main(new String[]{"password"});
+        assertEquals("password", ApplicationProperties.INSTANCE.getPassword());
     }
 
     /**
@@ -26,7 +26,7 @@ public class MainTest {
      */
     @Test
     void mainTest_WhenArgumentIsNull_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> Main.main(null));
+        assertDoesNotThrow(() -> ParserApplication.main(null));
     }
 
     /**
@@ -35,7 +35,7 @@ public class MainTest {
      */
     @Test
     void mainTest_WhenArgumentListIsEmpty_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> Main.main(new String[]{}));
+        assertDoesNotThrow(() -> ParserApplication.main(new String[]{}));
     }
 
     /**
@@ -46,8 +46,8 @@ public class MainTest {
         String originalPassword = System.getProperty("ParserPassword");
         try {
             System.setProperty("ParserPassword", "password");
-            Main.main(new String[]{});
-            assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"));
+            ParserApplication.main(new String[]{});
+            assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getPassword());
         } finally {
             if (originalPassword != null) {
                 System.setProperty("ParserPassword", originalPassword);

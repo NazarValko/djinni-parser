@@ -2,6 +2,9 @@ package org.nazar.service.notification.strategy;
 
 import org.nazar.service.properties.ApplicationProperties;
 import org.nazar.service.smtp.SmtpAuthenticator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -10,26 +13,24 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.awt.*;
-import java.util.Properties;
 
 /**
  * Strategy for sending email notification
  */
 public class EmailStrategy implements NotificationStrategy {
-    private final String from;
-    private final String to;
+
+    @Value("${notification.gmail.sender.email}")
+    private String from;
+
+    @Value("${notification.gmail.receiver.email}")
+    private String to;
     private final String messageBody;
 
     /**
      *
-     * @param from the sender email address
-     * @param to the receiver email address
      * @param messageBody the body of the email message
      */
-    public EmailStrategy(String from, String to, String messageBody) {
-        this.from = from;
-        this.to = to;
+    public EmailStrategy(String messageBody) {
         this.messageBody = messageBody;
     }
 
@@ -39,9 +40,8 @@ public class EmailStrategy implements NotificationStrategy {
     @Override
     public void send() {
         try {
-            MimeMessage message = new MimeMessage(Session.getDefaultInstance((Properties) ApplicationProperties
-                            .INSTANCE.getApplicationProperties().get("smtpProps"),
-                        authenticate(to, (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"))));
+            MimeMessage message = new MimeMessage(Session.getDefaultInstance(ApplicationProperties.INSTANCE.getSmtpProperties(),
+                        authenticate(to, ApplicationProperties.INSTANCE.getPassword())));
 
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -65,7 +65,6 @@ public class EmailStrategy implements NotificationStrategy {
     private Authenticator authenticate(String username, String password) {
         return new SmtpAuthenticator(username, password);
     }
-
 
 
 }

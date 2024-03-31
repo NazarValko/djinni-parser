@@ -2,10 +2,8 @@ package org.nazar.service;
 
 import org.nazar.service.dao.VacancyDao;
 import org.nazar.service.notification.NotificationService;
-import org.nazar.service.notification.NotificationServiceImpl;
 import org.nazar.service.notification.strategy.EmailStrategy;
-import org.nazar.service.properties.ApplicationProperties;
-import org.nazar.service.dao.VacancyFileDao;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
@@ -20,10 +18,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * ParserService executes scheduled parsing.
  */
+@Service
 public class ParserServiceImpl implements ParserService {
-    private final NotificationService notificationService = new NotificationServiceImpl();
-    private final VacancyDao vacancyDaoImpl = new VacancyFileDao();
+    private final NotificationService notificationService;
+    private final VacancyDao vacancyDaoImpl;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    public ParserServiceImpl(NotificationService notificationService, VacancyDao vacancyDaoImpl) {
+        this.notificationService = notificationService;
+        this.vacancyDaoImpl = vacancyDaoImpl;
+    }
 
     /**
      * Starts parsing process
@@ -67,8 +71,7 @@ public class ParserServiceImpl implements ParserService {
             String url = entry.getValue();
 
             List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
-            notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getApplicationProperties().get("senderEmail"),
-                    (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), newVacancies.toString()));
+            notificationService.send(new EmailStrategy(newVacancies.toString()));
             notificationService.makeSound();
         }
     }

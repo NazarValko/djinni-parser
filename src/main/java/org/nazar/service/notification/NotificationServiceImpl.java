@@ -1,12 +1,14 @@
 package org.nazar.service.notification;
 
 import org.nazar.service.notification.strategy.NotificationStrategy;
+import org.springframework.stereotype.Service;
 
 import java.awt.*;
 
 /**
  * Implementation of NotificationService to send notifications
  */
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     /**
@@ -16,6 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
      */
     public void send(NotificationStrategy strategy) {
         strategy.send();
+        System.out.println("Message sent");
     }
 
     /**

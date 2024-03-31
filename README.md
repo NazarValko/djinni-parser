@@ -13,7 +13,7 @@ The application can accept the email password for SMTP authentication in three d
 
 - **Java System Property**:
   You can pass the password as a system property when starting the JVM with the `-D` flag.
-- java -DParserPassword=password -cp app.jar org.nazar.Main
+- java -DParserPassword=password -cp app.jar org.nazar.ParserApplication
   Replace `password` with the actual password and `app.jar` with your compiled JAR file name.
 
 - **Environment Variable**:

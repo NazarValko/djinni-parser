@@ -1,5 +1,7 @@
 package org.nazar.service.dao;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,6 +13,7 @@ import java.util.List;
 /**
  * Utility class for managing response data from parser
  */
+@Component
 public class VacancyFileDao implements VacancyDao {
 
     /**
@@ -56,9 +59,8 @@ public class VacancyFileDao implements VacancyDao {
      * @return contents of file in list of strings format
      */
     public List<String> read(String resourceId) {
-        Path filePath = Paths.get("src/main/resources/parsedLinks/" + resourceId + ".txt");
-
         try {
+            Path filePath = getFilePath(resourceId);
             return Files.readAllLines(filePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Error during read file");

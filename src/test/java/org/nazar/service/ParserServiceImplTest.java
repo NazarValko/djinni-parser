@@ -1,6 +1,8 @@
 package org.nazar.service;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +15,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest
 public class ParserServiceImplTest {
+
+    @Autowired
+    private ParserService parserService;
 
     /**
      * Tests whether new data will be added to file
@@ -29,7 +35,7 @@ public class ParserServiceImplTest {
         Files.write(temp, initialFileContent);
 
         List<String> parsedData = List.of("Data1", "Data3", "Data6");
-        ParserServiceImpl parserService = new ParserServiceImpl();
+
         Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
         List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");
@@ -57,7 +63,7 @@ public class ParserServiceImplTest {
         Files.write(temp, initialFileContent);
 
         List<String> parsedData = List.of("Data1", "Data2");
-        ParserServiceImpl parserService = new ParserServiceImpl();
+
         Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
         List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");

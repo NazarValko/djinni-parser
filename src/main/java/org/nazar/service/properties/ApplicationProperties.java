@@ -1,75 +1,55 @@
 package org.nazar.service.properties;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Singleton class, holds required application data
  */
 public enum ApplicationProperties {
     INSTANCE;
-    private final Map<String, Object> applicationProperties = new HashMap<>();
 
-    /**
-     * Provides basic smtp configuration
-     *
-     */
-    private void setSmtpProperties() {
-        Properties properties = System.getProperties();
-
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        applicationProperties.put("smtpProps", properties);
-    }
-
-    /**
-     * Sets emails for sender and receiver
-     *
-     */
-    private void setEmails() {
-        applicationProperties.put("senderEmail", "nazar.valko09@gmail.com");
-        applicationProperties.put("receiverEmail", "nazarvlk793@gmail.com");
-    }
+    private String password;
 
     /**
      * Checks for password presence and put it in data
      *
      * @param passwordForGmail password from program argument
      */
-    private void setPassword(String passwordForGmail) {
-        String propName = "receiverPassword";
+    public void setPassword(String passwordForGmail) {
         if (passwordForGmail != null) {
-            applicationProperties.put(propName, passwordForGmail);
+            password = passwordForGmail;
         } else if (System.getProperty("ParserPassword") != null) {
-            applicationProperties.put(propName, System.getProperty("ParserPassword"));
+            password = System.getProperty("ParserPassword");
         } else {
-            applicationProperties.put(propName, System.getenv("Parser_Password"));
+            password = System.getenv("Parser_Password");
         }
     }
 
     /**
-     * sets all required data
+     * Getter for password
      *
-     * @param passwordForGmail password for receiver gmail
+     * @return field password
      */
-    public void setApplicationProperties(String passwordForGmail) {
-        setSmtpProperties();
-        setEmails();
-        setPassword(passwordForGmail);
+    public String getPassword() {
+        return password;
     }
-    
+
     /**
-     * Get data in map
+     * Provides basic smtp configuration
      *
-     * @return program data
      */
-    public Map<String, Object> getApplicationProperties() {
-        return applicationProperties;
+    public Properties getSmtpProperties() {
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream("src/main/resources/application.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties file");
+        }
+
+        return prop;
     }
 
 }

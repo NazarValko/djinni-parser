@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Strategy for parsing web page from Djinni
  */
+@Component
 public class DjinniParserStrategy implements ParserStrategy {
     private static final String BASE_URL = "https://djinni.co";
 
@@ -23,6 +25,7 @@ public class DjinniParserStrategy implements ParserStrategy {
      * @return a list of URLs to jobs
      */
     public List<String> parse(String html) {
+        System.out.println(html);
         if (html == null) {
             throw new IllegalArgumentException("HTML page is empty");
         }
