@@ -36,8 +36,8 @@ public class ParserServiceImpl implements ParserService {
         Runnable scanner = () -> {
             try {
                 process();
-                new Robot().mouseMove(10, 10);
-            } catch (IOException | AWTException e) {
+                //new Robot().mouseMove(10, 10);
+            } catch (IOException e) {
                 System.out.println("Cannot get data");
             }
         };
@@ -65,6 +65,7 @@ public class ParserServiceImpl implements ParserService {
         Map<ParserStrategy, String> strategies = Map.of(
                 new DouParserStrategy(), "https://jobs.dou.ua/first-job/",
                 new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
+
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             ParserStrategy parserStrategy = entry.getKey();

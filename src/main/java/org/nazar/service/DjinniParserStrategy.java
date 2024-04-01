@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * Strategy for parsing web page from Djinni
  */
-@Component
 public class DjinniParserStrategy implements ParserStrategy {
     private static final String BASE_URL = "https://djinni.co";
 

@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * Strategy for parsing web page from Dou
  */
-@Component
 public class DouParserStrategy implements ParserStrategy {
 
     /**
@@ -23,6 +22,7 @@ public class DouParserStrategy implements ParserStrategy {
      * @return list of links to found jobs
      */
     public List<String> parse(String html) {
+        System.out.println(html);
         if (html == null) {
             throw new IllegalArgumentException("HTML page is empty");
         }

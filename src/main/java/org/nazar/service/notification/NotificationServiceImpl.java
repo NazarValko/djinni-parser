@@ -18,7 +18,6 @@ public class NotificationServiceImpl implements NotificationService {
      */
     public void send(NotificationStrategy strategy) {
         strategy.send();
-        System.out.println("Message sent");
     }
 
     /**

@@ -4,6 +4,7 @@ import org.nazar.service.properties.ApplicationProperties;
 import org.nazar.service.smtp.SmtpAuthenticator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
@@ -19,12 +20,12 @@ import javax.mail.internet.MimeMessage;
  */
 public class EmailStrategy implements NotificationStrategy {
 
-    @Value("${notification.gmail.sender.email}")
-    private String from;
+//    @Value("${notification.gmail.sender.email}")
+    private String from = "nazar.valko09@gmail.com";
 
-    @Value("${notification.gmail.receiver.email}")
-    private String to;
-    private final String messageBody;
+//    @Value("${notification.gmail.receiver.email}")
+    private String to = "nazarvlk793@gmail.com";
+    private String messageBody;
 
     /**
      *

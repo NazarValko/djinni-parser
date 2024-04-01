@@ -42,14 +42,14 @@ public enum ApplicationProperties {
      *
      */
     public Properties getSmtpProperties() {
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream("src/main/resources/application.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties file");
-        }
+        Properties properties = System.getProperties();
 
-        return prop;
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        return properties;
     }
 
 }
