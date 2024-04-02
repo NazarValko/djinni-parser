@@ -1,12 +1,7 @@
 package org.nazar.service;
 
-import org.nazar.service.dao.VacancyDao;
-import org.nazar.service.notification.NotificationService;
-import org.nazar.service.notification.strategy.EmailStrategy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +10,11 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.nazar.service.dao.VacancyDao;
+import org.nazar.service.notification.NotificationService;
+import org.nazar.service.notification.strategy.EmailStrategy;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * ParserService executes scheduled parsing.
@@ -109,7 +109,7 @@ public class ParserServiceImpl implements ParserService {
     /**
      * Filters data from parser. Returns unique data (which is not in file)
      *
-     * @param parsedData   data from parser
+     * @param parsedData data from parser
      * @param dataFromFile read data from file
      * @return unique data represented in list of strings
      */

@@ -2,8 +2,6 @@ package org.nazar;
 
 import org.junit.jupiter.api.Test;
 import org.nazar.service.properties.ApplicationProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,18 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for Main class
  */
-@SpringBootTest
 public class ParserApplicationTest {
-
-    @Autowired
-    private ParserApplication parserApplication;
 
     /**
      * Test when command line arguments(password) is passed then it should be added to properties map
      */
     @Test
     void runTest() {
-        parserApplication.run("password");
+        ParserApplication.main(new String[] {"password"});
         assertEquals("password", ApplicationProperties.INSTANCE.getPassword());
     }
 
@@ -32,7 +26,7 @@ public class ParserApplicationTest {
      */
     @Test
     void runTest_WhenArgumentIsNull_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> parserApplication.run(null));
+        assertDoesNotThrow(() -> ParserApplication.main(null));
     }
 
     /**
@@ -41,7 +35,7 @@ public class ParserApplicationTest {
      */
     @Test
     void runTest_WhenArgumentListIsEmpty_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> parserApplication.run());
+        assertDoesNotThrow(() -> ParserApplication.main(new String[] {}));
     }
 
     /**
@@ -52,7 +46,7 @@ public class ParserApplicationTest {
         String originalPassword = System.getProperty("ParserPassword");
         try {
             System.setProperty("ParserPassword", "password");
-            parserApplication.run();
+            ParserApplication.main(new String[] {});
             assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getPassword());
         } finally {
             if (originalPassword != null) {

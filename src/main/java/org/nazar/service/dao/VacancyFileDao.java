@@ -1,7 +1,5 @@
 package org.nazar.service.dao;
 
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Utility class for managing response data from parser
@@ -20,7 +19,7 @@ public class VacancyFileDao implements VacancyDao {
      * Writes data represented in list of strings to file in data directory
      *
      * @param parsedLinks data got from parser
-     * @param resourceId  id of parsed resource
+     * @param resourceId id of parsed resource
      */
     public void write(List<String> parsedLinks, String resourceId) throws IOException {
         Path path = getFilePath(resourceId);

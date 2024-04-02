@@ -1,15 +1,13 @@
 package org.nazar.service.dao;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,15 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for ResultDataHelper class
  */
-@SpringBootTest
 public class VacancyFileDaoTest {
     private static final Path TEST_FILE_PATH = Paths.get("src/main/resources/parsedLinks/testData.txt");
 
 
     /**
      * Create file for testing
-     *
-     * @throws IOException when occurs
      */
     @BeforeEach
     public void setUp() {

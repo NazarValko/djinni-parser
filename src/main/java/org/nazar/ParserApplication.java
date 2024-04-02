@@ -9,6 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ParserApplication implements CommandLineRunner {
+
+    /**
+     * Set headless for java.awt to work in spring environment
+     */
     @PostConstruct
     public void setup() {
         System.setProperty("java.awt.headless", "false");
@@ -21,16 +25,17 @@ public class ParserApplication implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
+        args = args == null ? new String[]{} : args;
+        if (args.length == 0) {
+            ApplicationProperties.INSTANCE.setPassword(null);
+        } else {
+            ApplicationProperties.INSTANCE.setPassword(args[0]);
+        }
         SpringApplication.run(ParserApplication.class, args);
     }
 
     @Override
     public void run(String... args) {
-        if (args == null || args.length == 0) {
-            ApplicationProperties.INSTANCE.setPassword(null);
-        } else {
-            ApplicationProperties.INSTANCE.setPassword(args[0]);
-        }
         parserService.start();
     }
 }
