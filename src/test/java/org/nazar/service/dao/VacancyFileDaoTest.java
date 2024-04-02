@@ -3,6 +3,7 @@ package org.nazar.service.dao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for ResultDataHelper class
  */
+@SpringBootTest
 public class VacancyFileDaoTest {
     private static final Path TEST_FILE_PATH = Paths.get("src/main/resources/parsedLinks/testData.txt");
 
@@ -64,7 +66,6 @@ public class VacancyFileDaoTest {
 
     /**
      * When data was read successfully then it should be returned
-     *
      */
     @Test
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
@@ -76,7 +77,6 @@ public class VacancyFileDaoTest {
 
     /**
      * When during read exception happened data should not be returned
-     *
      */
     @Test
     void readDataTest_IfFail_ThenEmptyListShouldBeReturned() {

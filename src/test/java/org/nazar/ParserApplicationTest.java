@@ -2,6 +2,8 @@ package org.nazar;
 
 import org.junit.jupiter.api.Test;
 import org.nazar.service.properties.ApplicationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,14 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for Main class
  */
+@SpringBootTest
 public class ParserApplicationTest {
+
+    @Autowired
+    private ParserApplication parserApplication;
 
     /**
      * Test when command line arguments(password) is passed then it should be added to properties map
      */
     @Test
-    void mainTest() {
-        ParserApplication.main(new String[]{"password"});
+    void runTest() {
+        parserApplication.run("password");
         assertEquals("password", ApplicationProperties.INSTANCE.getPassword());
     }
 
@@ -25,8 +31,8 @@ public class ParserApplicationTest {
      * Password in properties should be present(as environmental variable or java system property)
      */
     @Test
-    void mainTest_WhenArgumentIsNull_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> ParserApplication.main(null));
+    void runTest_WhenArgumentIsNull_ThenPassNullParameterAsPassword() {
+        assertDoesNotThrow(() -> parserApplication.run(null));
     }
 
     /**
@@ -34,19 +40,19 @@ public class ParserApplicationTest {
      * and use put in map password from environmental variable or java system property
      */
     @Test
-    void mainTest_WhenArgumentListIsEmpty_ThenPassNullParameterAsPassword() {
-        assertDoesNotThrow(() -> ParserApplication.main(new String[]{}));
+    void runTest_WhenArgumentListIsEmpty_ThenPassNullParameterAsPassword() {
+        assertDoesNotThrow(() -> parserApplication.run());
     }
 
     /**
      * Test when command line arguments is empty then system property should be passed
      */
     @Test
-    void mainTest_WhenArgumentIsNotPresent_ThenSystemPropertyShouldBeUsed() {
+    void runTest_WhenArgumentIsNotPresent_ThenSystemPropertyShouldBeUsed() {
         String originalPassword = System.getProperty("ParserPassword");
         try {
             System.setProperty("ParserPassword", "password");
-            ParserApplication.main(new String[]{});
+            parserApplication.run();
             assertEquals(System.getProperty("ParserPassword"), ApplicationProperties.INSTANCE.getPassword());
         } finally {
             if (originalPassword != null) {
