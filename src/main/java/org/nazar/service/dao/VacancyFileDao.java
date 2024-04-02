@@ -55,17 +55,16 @@ public class VacancyFileDao implements VacancyDao {
     /**
      * Read data from file. If there is no data returns empty line
      *
-     * @param resourceId  id of parsed resource
+     * @param resourceId id of parsed resource
      * @return contents of file in list of strings format
      */
     public List<String> read(String resourceId) {
-        Path filePath = Paths.get("src/main/resources/parsedLinks/" + resourceId + ".txt");
         try {
+            Path filePath = getFilePath(resourceId);
             return Files.readAllLines(filePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Error during read file");
             return List.of();
         }
     }
-
 }

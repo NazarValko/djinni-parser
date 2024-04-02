@@ -1,8 +1,6 @@
 package org.nazar.service.properties;
 
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -39,7 +37,6 @@ public enum ApplicationProperties {
 
     /**
      * Provides basic smtp configuration
-     *
      */
     public Properties getSmtpProperties() {
         Properties properties = System.getProperties();

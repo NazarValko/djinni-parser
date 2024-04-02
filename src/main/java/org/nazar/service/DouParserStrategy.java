@@ -4,7 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class DouParserStrategy implements ParserStrategy {
      * @return list of links to found jobs
      */
     public List<String> parse(String html) {
-        System.out.println(html);
         if (html == null) {
             throw new IllegalArgumentException("HTML page is empty");
         }

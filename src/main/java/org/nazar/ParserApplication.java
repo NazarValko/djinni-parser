@@ -1,14 +1,18 @@
 package org.nazar;
 
+import jakarta.annotation.PostConstruct;
 import org.nazar.service.ParserService;
 import org.nazar.service.properties.ApplicationProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ParserApplication implements CommandLineRunner {
+    @PostConstruct
+    public void setup() {
+        System.setProperty("java.awt.headless", "false");
+    }
 
     private final ParserService parserService;
 

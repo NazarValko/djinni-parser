@@ -3,6 +3,7 @@ package org.nazar.service;
 import org.nazar.service.dao.VacancyDao;
 import org.nazar.service.notification.NotificationService;
 import org.nazar.service.notification.strategy.EmailStrategy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -20,6 +21,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class ParserServiceImpl implements ParserService {
+
+    @Value("${notification.gmail.sender.email}")
+    private String fromEmail;
+
+    @Value("${notification.gmail.receiver.email}")
+    private String toEmail;
+
     private final NotificationService notificationService;
     private final VacancyDao vacancyDaoImpl;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -36,8 +44,8 @@ public class ParserServiceImpl implements ParserService {
         Runnable scanner = () -> {
             try {
                 process();
-                //new Robot().mouseMove(10, 10);
-            } catch (IOException e) {
+                new Robot().mouseMove(10, 10);
+            } catch (IOException | AWTException e) {
                 System.out.println("Cannot get data");
             }
         };
@@ -55,7 +63,6 @@ public class ParserServiceImpl implements ParserService {
         return parserStrategy.getData(url);
     }
 
-
     /**
      * Processes the parsing task and sends notifications. Executes every 1 minute
      *
@@ -72,12 +79,10 @@ public class ParserServiceImpl implements ParserService {
             String url = entry.getValue();
 
             List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
-            notificationService.send(new EmailStrategy(newVacancies.toString()));
+            notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
             notificationService.makeSound();
         }
     }
-
-
 
     /**
      * Checks whether data exists in file. If not - add, then return unique data
@@ -104,7 +109,7 @@ public class ParserServiceImpl implements ParserService {
     /**
      * Filters data from parser. Returns unique data (which is not in file)
      *
-     * @param parsedData data from parser
+     * @param parsedData   data from parser
      * @param dataFromFile read data from file
      * @return unique data represented in list of strings
      */
@@ -115,5 +120,4 @@ public class ParserServiceImpl implements ParserService {
                 .filter(line -> !linesFromFileSet.contains(line))
                 .toList();
     }
-
 }
