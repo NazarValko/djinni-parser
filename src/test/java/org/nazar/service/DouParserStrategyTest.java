@@ -1,11 +1,14 @@
 package org.nazar.service;
 
-import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -15,7 +18,6 @@ class DouParserStrategyTest {
 
     /**
      * Test whether method parse() returns correct result of links for Dou
-     *
      */
     @Test
     void parseTest() throws IOException {

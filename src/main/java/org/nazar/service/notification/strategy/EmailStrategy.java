@@ -1,8 +1,5 @@
 package org.nazar.service.notification.strategy;
 
-import org.nazar.service.properties.ApplicationProperties;
-import org.nazar.service.smtp.SmtpAuthenticator;
-
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -10,8 +7,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.awt.*;
-import java.util.Properties;
+import org.nazar.service.properties.ApplicationProperties;
+import org.nazar.service.smtp.SmtpAuthenticator;
 
 /**
  * Strategy for sending email notification
@@ -22,9 +19,6 @@ public class EmailStrategy implements NotificationStrategy {
     private final String messageBody;
 
     /**
-     *
-     * @param from the sender email address
-     * @param to the receiver email address
      * @param messageBody the body of the email message
      */
     public EmailStrategy(String from, String to, String messageBody) {
@@ -39,15 +33,14 @@ public class EmailStrategy implements NotificationStrategy {
     @Override
     public void send() {
         try {
-            MimeMessage message = new MimeMessage(Session.getDefaultInstance((Properties) ApplicationProperties
-                            .INSTANCE.getApplicationProperties().get("smtpProps"),
-                        authenticate(to, (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverPassword"))));
+            MimeMessage message = new MimeMessage(Session.getDefaultInstance(ApplicationProperties.INSTANCE.getSmtpProperties(),
+                    authenticate(to, ApplicationProperties.INSTANCE.getPassword())));
 
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Latest vacancy");
             message.setText(messageBody);
-            if (!messageBody.substring(1, messageBody.length()-1).isEmpty()) {
+            if (!messageBody.substring(1, messageBody.length() - 1).isEmpty()) {
                 Transport.send(message);
             }
         } catch (MessagingException mex) {
@@ -65,7 +58,4 @@ public class EmailStrategy implements NotificationStrategy {
     private Authenticator authenticate(String username, String password) {
         return new SmtpAuthenticator(username, password);
     }
-
-
-
 }

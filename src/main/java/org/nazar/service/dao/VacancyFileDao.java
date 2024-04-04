@@ -7,17 +7,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Utility class for managing response data from parser
  */
+@Component
 public class VacancyFileDao implements VacancyDao {
 
     /**
      * Writes data represented in list of strings to file in data directory
      *
      * @param parsedLinks data got from parser
-     * @param resourceId  id of parsed resource
+     * @param resourceId id of parsed resource
      */
     public void write(List<String> parsedLinks, String resourceId) throws IOException {
         Path path = getFilePath(resourceId);
@@ -52,18 +54,16 @@ public class VacancyFileDao implements VacancyDao {
     /**
      * Read data from file. If there is no data returns empty line
      *
-     * @param resourceId  id of parsed resource
+     * @param resourceId id of parsed resource
      * @return contents of file in list of strings format
      */
     public List<String> read(String resourceId) {
-        Path filePath = Paths.get("src/main/resources/parsedLinks/" + resourceId + ".txt");
-
         try {
+            Path filePath = getFilePath(resourceId);
             return Files.readAllLines(filePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Error during read file");
             return List.of();
         }
     }
-
 }

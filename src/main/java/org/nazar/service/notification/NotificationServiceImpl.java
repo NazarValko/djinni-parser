@@ -1,12 +1,15 @@
 package org.nazar.service.notification;
 
+import java.awt.Toolkit;
 import org.nazar.service.notification.strategy.NotificationStrategy;
+import org.springframework.stereotype.Service;
 
-import java.awt.*;
+
 
 /**
  * Implementation of NotificationService to send notifications
  */
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     /**

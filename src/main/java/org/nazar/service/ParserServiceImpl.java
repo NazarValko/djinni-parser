@@ -1,13 +1,7 @@
 package org.nazar.service;
 
-import org.nazar.service.dao.VacancyDao;
-import org.nazar.service.notification.NotificationService;
-import org.nazar.service.notification.NotificationServiceImpl;
-import org.nazar.service.notification.strategy.EmailStrategy;
-import org.nazar.service.properties.ApplicationProperties;
-import org.nazar.service.dao.VacancyFileDao;
-
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -16,14 +10,32 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.nazar.service.dao.VacancyDao;
+import org.nazar.service.notification.NotificationService;
+import org.nazar.service.notification.strategy.EmailStrategy;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * ParserService executes scheduled parsing.
  */
+@Service
 public class ParserServiceImpl implements ParserService {
-    private final NotificationService notificationService = new NotificationServiceImpl();
-    private final VacancyDao vacancyDaoImpl = new VacancyFileDao();
+
+    @Value("${notification.gmail.sender.email}")
+    private String fromEmail;
+
+    @Value("${notification.gmail.receiver.email}")
+    private String toEmail;
+
+    private final NotificationService notificationService;
+    private final VacancyDao vacancyDaoImpl;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    public ParserServiceImpl(NotificationService notificationService, VacancyDao vacancyDaoImpl) {
+        this.notificationService = notificationService;
+        this.vacancyDaoImpl = vacancyDaoImpl;
+    }
 
     /**
      * Starts parsing process
@@ -51,7 +63,6 @@ public class ParserServiceImpl implements ParserService {
         return parserStrategy.getData(url);
     }
 
-
     /**
      * Processes the parsing task and sends notifications. Executes every 1 minute
      *
@@ -61,19 +72,17 @@ public class ParserServiceImpl implements ParserService {
         Map<ParserStrategy, String> strategies = Map.of(
                 new DouParserStrategy(), "https://jobs.dou.ua/first-job/",
                 new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
+
         );
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             ParserStrategy parserStrategy = entry.getKey();
             String url = entry.getValue();
 
             List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
-            notificationService.send(new EmailStrategy((String) ApplicationProperties.INSTANCE.getApplicationProperties().get("senderEmail"),
-                    (String) ApplicationProperties.INSTANCE.getApplicationProperties().get("receiverEmail"), newVacancies.toString()));
+            notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
             notificationService.makeSound();
         }
     }
-
-
 
     /**
      * Checks whether data exists in file. If not - add, then return unique data
@@ -111,5 +120,4 @@ public class ParserServiceImpl implements ParserService {
                 .filter(line -> !linesFromFileSet.contains(line))
                 .toList();
     }
-
 }

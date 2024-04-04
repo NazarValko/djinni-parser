@@ -1,14 +1,13 @@
 package org.nazar.service.dao;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,8 +21,6 @@ public class VacancyFileDaoTest {
 
     /**
      * Create file for testing
-     *
-     * @throws IOException when occurs
      */
     @BeforeEach
     public void setUp() {
@@ -64,7 +61,6 @@ public class VacancyFileDaoTest {
 
     /**
      * When data was read successfully then it should be returned
-     *
      */
     @Test
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
@@ -76,7 +72,6 @@ public class VacancyFileDaoTest {
 
     /**
      * When during read exception happened data should not be returned
-     *
      */
     @Test
     void readDataTest_IfFail_ThenEmptyListShouldBeReturned() {
