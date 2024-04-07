@@ -88,7 +88,7 @@ public class ParserServiceImpl implements ParserService {
             newVacancies.addAll(getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId()));
         }
         notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
-        notificationService.send(new TelegramStrategy(vacancyBot, "newVacancies.toString()"));
+        notificationService.send(new TelegramStrategy(vacancyBot, newVacancies.toString()));
         notificationService.makeSound();
     }
 
