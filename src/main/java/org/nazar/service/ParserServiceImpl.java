@@ -3,6 +3,7 @@ package org.nazar.service;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.nazar.service.dao.VacancyDao;
 import org.nazar.service.notification.NotificationService;
+import org.nazar.service.notification.bot.VacancyBot;
 import org.nazar.service.notification.strategy.EmailStrategy;
+import org.nazar.service.notification.strategy.TelegramStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +30,17 @@ public class ParserServiceImpl implements ParserService {
 
     @Value("${notification.gmail.receiver.email}")
     private String toEmail;
-
     private final NotificationService notificationService;
     private final VacancyDao vacancyDaoImpl;
+    private final VacancyBot vacancyBot;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    public ParserServiceImpl(NotificationService notificationService, VacancyDao vacancyDaoImpl) {
+    public ParserServiceImpl(NotificationService notificationService,
+                             VacancyDao vacancyDaoImpl,
+                             VacancyBot vacancyBot) {
         this.notificationService = notificationService;
         this.vacancyDaoImpl = vacancyDaoImpl;
+        this.vacancyBot = vacancyBot;
     }
 
     /**
@@ -74,14 +80,16 @@ public class ParserServiceImpl implements ParserService {
                 new DjinniParserStrategy(), "https://djinni.co/jobs/?primary_keyword=Java&exp_level=no_exp"
 
         );
+        List<String> newVacancies = new ArrayList<>();
         for (Map.Entry<ParserStrategy, String> entry : strategies.entrySet()) {
             ParserStrategy parserStrategy = entry.getKey();
             String url = entry.getValue();
 
-            List<String> newVacancies = getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId());
-            notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
-            notificationService.makeSound();
+            newVacancies.addAll(getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId()));
         }
+        notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
+        notificationService.send(new TelegramStrategy(vacancyBot, "newVacancies.toString()"));
+        notificationService.makeSound();
     }
 
     /**
@@ -99,7 +107,7 @@ public class ParserServiceImpl implements ParserService {
             try {
                 vacancyDaoImpl.write(newData, resourceId);
             } catch (IOException e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
                 return List.of();
             }
         }
