@@ -20,6 +20,7 @@ The application can accept the email password for SMTP authentication in three d
   You can set an environment variable in your system named `PARSER_PASSWORD`.
 
 ### Setting the Bot Token
-  Create bot in telegram through Bot Father
-  Create .env file and add variable with name BOT_TOKEN
+  Go to @RelevantVacanciesSenderBot in Telegram
+  Create .env file and add variable with name BOT_TOKEN with value 7079340205:AAEBPFmuWD4IOXuaIjcyD8F7WRn2MTmN_G0
+
 

@@ -1,10 +1,11 @@
 package org.nazar.service.notification.bot;
 
-import org.nazar.service.notification.bot.response.ResponseHandler;
 import org.nazar.service.properties.ApplicationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.abilitybots.api.sender.SilentSender;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
@@ -18,7 +19,7 @@ public class VacancyBot extends AbilityBot {
      * Call protected constructor of class AbilityBot
      * @param env object that manages env properties
      */
-    protected VacancyBot(Environment env) {
+    public VacancyBot(Environment env) {
         super(env.getProperty("BOT_TOKEN"), "RelevantVacanciesSenderBot");
         responseHandler = new ResponseHandler(silent);
     }
@@ -46,10 +47,37 @@ public class VacancyBot extends AbilityBot {
     }
 
     /**
-     * Get response handler object
-     * @return object of response handler
+     * Sends parsed links to user
+     * @param message links from parser
      */
-    public ResponseHandler getResponseHandler() {
-        return responseHandler;
+    public void sendMessage(String message) {
+        responseHandler.sendParsedLinks(ApplicationProperties.INSTANCE.getChatId(), message);
+    }
+
+    /**
+     * Sends responses to user
+     */
+    private record ResponseHandler(SilentSender sender) {
+
+        /**
+         * Initializes object of SilentSender
+         *
+         * @param sender object that sends message
+         */
+        private ResponseHandler {
+        }
+
+        /**
+         * Sends links to user
+         *
+         * @param chatId id of chat
+         * @param parsedLinks parsed links
+         */
+        public void sendParsedLinks(Long chatId, String parsedLinks) {
+            SendMessage message = new SendMessage();
+            message.setChatId(chatId);
+            message.setText(parsedLinks);
+            sender.execute(message);
+        }
     }
 }

@@ -32,15 +32,12 @@ public class ParserServiceImpl implements ParserService {
     private String toEmail;
     private final NotificationService notificationService;
     private final VacancyDao vacancyDaoImpl;
-    private final VacancyBot vacancyBot;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ParserServiceImpl(NotificationService notificationService,
-                             VacancyDao vacancyDaoImpl,
-                             VacancyBot vacancyBot) {
+                             VacancyDao vacancyDaoImpl) {
         this.notificationService = notificationService;
         this.vacancyDaoImpl = vacancyDaoImpl;
-        this.vacancyBot = vacancyBot;
     }
 
     /**
@@ -88,7 +85,7 @@ public class ParserServiceImpl implements ParserService {
             newVacancies.addAll(getNewVacancies(parse(parserStrategy, url), parserStrategy.getResourceId()));
         }
         notificationService.send(new EmailStrategy(fromEmail, toEmail, newVacancies.toString()));
-        notificationService.send(new TelegramStrategy(vacancyBot, newVacancies.toString()));
+        notificationService.send(new TelegramStrategy((VacancyBot) notificationService.getBot(), newVacancies.toString()));
         notificationService.makeSound();
     }
 
