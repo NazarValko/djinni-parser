@@ -1,7 +1,6 @@
 package org.nazar.service.notification;
 
 import org.nazar.service.notification.strategy.NotificationStrategy;
-import org.telegram.abilitybots.api.bot.AbilityBot;
 
 /**
  * Defines the contract for notification services.
@@ -18,10 +17,4 @@ public interface NotificationService {
      * Makes a sound after the links have been sent to the email
      */
     void makeSound();
-
-    /**
-     * Get instance of concrete ability bot
-     * @return concrete bot object
-     */
-    AbilityBot getBot();
 }
