@@ -4,8 +4,6 @@ import java.awt.Toolkit;
 import org.nazar.service.notification.strategy.NotificationStrategy;
 import org.springframework.stereotype.Service;
 
-
-
 /**
  * Implementation of NotificationService to send notifications
  */

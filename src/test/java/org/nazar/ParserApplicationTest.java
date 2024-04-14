@@ -2,6 +2,7 @@ package org.nazar;
 
 import org.junit.jupiter.api.Test;
 import org.nazar.service.properties.ApplicationProperties;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +16,7 @@ public class ParserApplicationTest {
      * Test when command line arguments(password) is passed then it should be added to properties map
      */
     @Test
-    void runTest() {
+    void runTest() throws TelegramApiException {
         ParserApplication.main(new String[] {"password"});
         assertEquals("password", ApplicationProperties.INSTANCE.getPassword());
     }
@@ -42,7 +43,7 @@ public class ParserApplicationTest {
      * Test when command line arguments is empty then system property should be passed
      */
     @Test
-    void runTest_WhenArgumentIsNotPresent_ThenSystemPropertyShouldBeUsed() {
+    void runTest_WhenArgumentIsNotPresent_ThenSystemPropertyShouldBeUsed() throws TelegramApiException {
         String originalPassword = System.getProperty("ParserPassword");
         try {
             System.setProperty("ParserPassword", "password");
