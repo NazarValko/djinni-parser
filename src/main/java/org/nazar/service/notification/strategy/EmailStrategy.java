@@ -9,6 +9,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.nazar.service.properties.ApplicationProperties;
 import org.nazar.service.smtp.SmtpAuthenticator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Strategy for sending email notification
@@ -17,6 +19,8 @@ public class EmailStrategy implements NotificationStrategy {
     private final String from;
     private final String to;
     private final String messageBody;
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailStrategy.class);
 
     /**
      * @param messageBody the body of the email message
@@ -44,7 +48,7 @@ public class EmailStrategy implements NotificationStrategy {
                 Transport.send(message);
             }
         } catch (MessagingException mex) {
-            System.out.println("Authentication failed. Provide correct credentials");
+            logger.error("Authentication failed. Provide correct credentials");
         }
     }
 

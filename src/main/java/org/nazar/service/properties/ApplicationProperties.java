@@ -13,6 +13,7 @@ public enum ApplicationProperties {
     INSTANCE;
 
     private String password;
+
     private final List<ChatIdAvailableListener> listeners = new ArrayList<>();
 
     private Long chatId;

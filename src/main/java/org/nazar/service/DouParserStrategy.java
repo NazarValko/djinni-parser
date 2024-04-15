@@ -7,11 +7,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Strategy for parsing web page from Dou
  */
 public class DouParserStrategy implements ParserStrategy {
+
+    private static final Logger logger = LoggerFactory.getLogger(DouParserStrategy.class);
 
     /**
      * Parses jobs that match specific criteria
@@ -32,7 +36,7 @@ public class DouParserStrategy implements ParserStrategy {
                 String titleText = titleElement.text();
                 if (titleText.matches(".*\\bJava\\b(?!Script).*")) {
                     String resultLink = titleElement.attr("href");
-                    System.out.println(resultLink);
+                    logger.info(resultLink);
                     resultLinks.add(resultLink);
                 }
             }

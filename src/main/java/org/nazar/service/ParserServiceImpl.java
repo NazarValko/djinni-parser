@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 import org.nazar.service.dao.VacancyDao;
 import org.nazar.service.notification.NotificationService;
 import org.nazar.service.notification.strategy.NotificationFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,8 @@ public class ParserServiceImpl implements ParserService {
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
+    private static final Logger logger = LoggerFactory.getLogger(ParserServiceImpl.class);
+
     public ParserServiceImpl(NotificationService notificationService,
                              VacancyDao vacancyDaoImpl, NotificationFactory notificationFactory) {
         this.notificationService = notificationService;
@@ -52,7 +56,7 @@ public class ParserServiceImpl implements ParserService {
                 process();
                 new Robot().mouseMove(10, 10);
             } catch (IOException | AWTException e) {
-                System.out.println("Cannot get data");
+                logger.error("Cannot get data");
             }
         };
         scheduler.scheduleAtFixedRate(scanner, 0, 1, TimeUnit.MINUTES);
@@ -107,7 +111,7 @@ public class ParserServiceImpl implements ParserService {
             try {
                 vacancyDaoImpl.write(newData, resourceId);
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                logger.error(e.getMessage());
                 return List.of();
             }
         }
