@@ -19,11 +19,24 @@ public enum ApplicationProperties {
     private Long chatId;
 
     /**
+     * Checks args and stores it in ApplicationProperties class
+     * @param args args from program
+     */
+    public void readArgsFromCommandLine(String[] args) {
+        args = args == null ? new String[]{} : args;
+        if (args.length == 0) {
+            setPassword(null);
+        } else {
+            setPassword(args[0]);
+        }
+    }
+
+    /**
      * Checks for password presence and put it in data
      *
      * @param passwordForGmail password from program argument
      */
-    public void setPassword(String passwordForGmail) {
+    private void setPassword(String passwordForGmail) {
         if (passwordForGmail != null) {
             password = passwordForGmail;
         } else if (System.getProperty("ParserPassword") != null) {
