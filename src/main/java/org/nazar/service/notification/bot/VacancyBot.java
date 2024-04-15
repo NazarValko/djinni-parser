@@ -95,7 +95,7 @@ public class VacancyBot extends AbilityBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            System.out.println("Error trying to send message");
+            logger.error("Error trying to send message");
         }
     }
 
@@ -111,7 +111,7 @@ public class VacancyBot extends AbilityBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            System.out.println("Error trying to send message");
+            logger.error("Error trying to send message");
         }
     }
 }

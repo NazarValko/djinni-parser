@@ -7,12 +7,16 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Strategy for parsing web page from Djinni
  */
 public class DjinniParserStrategy implements ParserStrategy {
     private static final String BASE_URL = "https://djinni.co";
+
+    private static final Logger logger = LoggerFactory.getLogger(DjinniParserStrategy.class);
 
 
     /**
@@ -35,7 +39,7 @@ public class DjinniParserStrategy implements ParserStrategy {
                 Element link = temp.select("a.h3.job-list-item__link").first();
                 if (link != null) {
                     String resultLink = BASE_URL + link.attr("href");
-                    System.out.println(resultLink);
+                    logger.info(resultLink);
                     resultLinks.add(resultLink);
                 }
             }
