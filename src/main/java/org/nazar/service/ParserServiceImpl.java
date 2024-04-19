@@ -16,6 +16,7 @@ import org.nazar.service.notification.NotificationService;
 import org.nazar.service.notification.strategy.NotificationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class ParserServiceImpl implements ParserService {
     private static final Logger logger = LoggerFactory.getLogger(ParserServiceImpl.class);
 
     public ParserServiceImpl(NotificationService notificationService,
-                             VacancyDao vacancyDaoImpl, NotificationFactory notificationFactory) {
+                             @Qualifier("vacancyDBDao") VacancyDao vacancyDaoImpl, NotificationFactory notificationFactory) {
         this.notificationService = notificationService;
         this.vacancyDaoImpl = vacancyDaoImpl;
         this.notificationFactory = notificationFactory;
