@@ -54,14 +54,14 @@ public enum ApplicationProperties {
      */
     private void initTables(Connection connection) {
         String sqlCreateLinks = "CREATE TABLE IF NOT EXISTS parsers_links ("
-                + "id SERIAL PRIMARY KEY,"
+                + "id BIGINT PRIMARY KEY,"
                 + "FK_provider_id INT NOT NULL,"
                 + "link VARCHAR(255) NOT NULL,"
                 + "FOREIGN KEY (FK_provider_id) REFERENCES link_providers(id)"
                 + ");";
 
         String sqlCreateProviders = "CREATE TABLE IF NOT EXISTS link_providers ("
-                + "id INT PRIMARY KEY,"
+                + "id BIGINT PRIMARY KEY,"
                 + "name VARCHAR(255) NOT NULL"
                 + ");";
 
