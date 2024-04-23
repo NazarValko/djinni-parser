@@ -1,25 +1,29 @@
 package org.nazar.service.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import org.nazar.service.properties.ApplicationProperties;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
  * Class for managing data from user using h2 database
  */
 @Component
+@Primary
 public class VacancyDBDao implements VacancyDao {
+
+    JdbcTemplate jdbcTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(VacancyDBDao.class);
 
-    Connection connection = ApplicationProperties.INSTANCE.connect();
+    public VacancyDBDao(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
     /**
      * Writes parsed links to database
@@ -28,12 +32,28 @@ public class VacancyDBDao implements VacancyDao {
      */
     @Override
     public void write(List<String> parsedLinks, String resourceId) {
-        try(PreparedStatement statement = connection.prepareStatement("insert into parsers_links (FK_provider_id, link) values (?, ?);")) {
-            statement.setInt(2, Integer.parseInt(resourceId));
-            statement.setString(3, parsedLinks.toString());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Cannot execute sql query");
+        try {
+            String checkProviderSql = "select id from link_providers where name = ?";
+            List<Integer> providerIds = jdbcTemplate.query(checkProviderSql,
+                    (rs, rowNum) -> rs.getInt("id"), resourceId);
+
+            Integer providerId = providerIds.isEmpty() ? null : providerIds.get(0);
+
+            if (providerId == null) {
+                String insertProviderSql = "insert into link_providers (name) values (?)";
+                jdbcTemplate.update(insertProviderSql, resourceId);
+
+                providerId = jdbcTemplate.query(checkProviderSql,
+                        (rs, rowNum) -> rs.getInt("id"), resourceId).get(0);
+            }
+
+            String insertLinkSql = "insert into parsers_links (FK_provider_id, link) values (?, ?)";
+
+            jdbcTemplate.update(insertLinkSql, providerId, parsedLinks.toString());
+
+            logger.info("Data was written successfully");
+        } catch (DataAccessException e) {
+            logger.error("Cannot execute sql query", e);
         }
     }
 
@@ -44,14 +64,13 @@ public class VacancyDBDao implements VacancyDao {
      */
     @Override
     public List<String> read(String resourceId) {
-        try(PreparedStatement statement = connection.prepareStatement("select link from parsers_links where FK_provider_id = ?")) {
-            statement.setInt(1, Integer.parseInt(resourceId));
-            ResultSet resultSet = statement.executeQuery();
-
-            return Arrays.stream(resultSet.toString().substring(1, resultSet.toString().length()-1).split(",\\s*")).toList();
-        } catch (SQLException e) {
-            logger.error("Cannot execute sql query");
+        String sql = "select link from parsers_links where FK_provider_id = (select id from link_providers where name = ?)";
+        try {
+            String result = jdbcTemplate.query(sql, rs -> rs.next() ? rs.getString("link") : null, resourceId);
+            return result != null ? Arrays.stream(result.substring(1, result.length()-1).split(",\\s*")).toList() : List.of();
+        } catch (DataAccessException e) {
+            logger.error("Cannot execute sql query", e);
+            return List.of();
         }
-        return null;
     }
 }
