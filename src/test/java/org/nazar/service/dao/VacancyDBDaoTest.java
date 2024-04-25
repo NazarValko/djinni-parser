@@ -1,16 +1,10 @@
 package org.nazar.service.dao;
 
-import java.util.Arrays;
 import java.util.List;
-import javax.sql.DataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,41 +14,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @SpringBootTest
 @ActiveProfiles("test")
-@TestPropertySource(locations = "classpath:application-test.properties")
 public class VacancyDBDaoTest {
 
-    @Autowired
-    private DataSource dataSource;
+    private final String resourceId = "testResource";
 
     @Autowired
     private VacancyDBDao vacancyDBDao;
-
-    private JdbcTemplate jdbcTemplate;
-
-    /**
-     * Creates connection
-     */
-    @BeforeEach
-    void setUp() {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    /**
-     * Delete test links
-     */
-    @AfterEach
-    void tearDown() {
-        jdbcTemplate.execute("delete from parsers_links;");
-        jdbcTemplate.execute("delete from link_providers;");
-    }
 
     /**
      * Tests write links of ok then it should be in database
      */
     @Test
     void writeDataTest_IfSucceed_ThenDataShouldBeWritten() {
-        String resourceId = "testResource";
-        List<String> parsedLinks = Arrays.asList("http://link1.com", "http://link2.com");
+        List<String> parsedLinks = List.of("http://link1.com", "http://link2.com");
 
         vacancyDBDao.write(parsedLinks, resourceId);
 
@@ -68,8 +40,7 @@ public class VacancyDBDaoTest {
      */
     @Test
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
-        String resourceId = "testResource";
-        List<String> expectedLinks = Arrays.asList("http://link1.com", "http://link2.com");
+        List<String> expectedLinks = List.of("http://link1.com", "http://link2.com");
         vacancyDBDao.write(expectedLinks, resourceId);
 
         List<String> actualLinks = vacancyDBDao.read(resourceId);

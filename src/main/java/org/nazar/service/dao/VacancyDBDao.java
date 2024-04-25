@@ -2,7 +2,6 @@ package org.nazar.service.dao;
 
 import java.util.Arrays;
 import java.util.List;
-import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
@@ -17,12 +16,12 @@ import org.springframework.stereotype.Component;
 @Primary
 public class VacancyDBDao implements VacancyDao {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(VacancyDBDao.class);
 
-    public VacancyDBDao(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    public VacancyDBDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -33,21 +32,21 @@ public class VacancyDBDao implements VacancyDao {
     @Override
     public void write(List<String> parsedLinks, String resourceId) {
         try {
-            String checkProviderSql = "select id from link_providers where name = ?";
+            String checkProviderSql = "SELECT id FROM link_providers WHERE name = ?";
             List<Integer> providerIds = jdbcTemplate.query(checkProviderSql,
                     (rs, rowNum) -> rs.getInt("id"), resourceId);
 
             Integer providerId = providerIds.isEmpty() ? null : providerIds.get(0);
 
             if (providerId == null) {
-                String insertProviderSql = "insert into link_providers (name) values (?)";
+                String insertProviderSql = "INSERT INTO link_providers (name) VALUES (?)";
                 jdbcTemplate.update(insertProviderSql, resourceId);
 
                 providerId = jdbcTemplate.query(checkProviderSql,
                         (rs, rowNum) -> rs.getInt("id"), resourceId).get(0);
             }
 
-            String insertLinkSql = "insert into parsers_links (FK_provider_id, link) values (?, ?)";
+            String insertLinkSql = "INSERT INTO parsers_links (FK_provider_id, link) VALUES (?, ?)";
 
             jdbcTemplate.update(insertLinkSql, providerId, parsedLinks.toString());
 
@@ -64,7 +63,7 @@ public class VacancyDBDao implements VacancyDao {
      */
     @Override
     public List<String> read(String resourceId) {
-        String sql = "select link from parsers_links where FK_provider_id = (select id from link_providers where name = ?)";
+        String sql = "SELECT link FROM parsers_links WHERE FK_provider_id = (SELECT id FROM link_providers WHERE name = ?)";
         try {
             String result = jdbcTemplate.query(sql, rs -> rs.next() ? rs.getString("link") : null, resourceId);
             return result != null ? Arrays.stream(result.substring(1, result.length()-1).split(",\\s*")).toList() : List.of();
