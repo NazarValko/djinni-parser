@@ -1,7 +1,7 @@
 -- Create a table for storing the providers of links if it does not already exist
 CREATE TABLE IF NOT EXISTS link_providers (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,  -- Primary key, automatically incrementing to ensure uniqueness
-    name TEXT NOT NULL                     -- The domain name of the provider
+    name VARCHAR(255) NOT NULL             -- The domain name of the provider
 );
 
 -- Create a table for storing links from parser if it does not already exist

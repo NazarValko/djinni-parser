@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 public class VacancyDBDaoTest {
 
-    private final String resourceId = "testResource";
+    private final String RESOURCE_ID = "testResource";
 
     @Autowired
     private VacancyDBDao vacancyDBDao;
@@ -28,7 +28,7 @@ public class VacancyDBDaoTest {
     void writeDataTest_IfSucceed_ThenDataShouldBeWritten() {
         List<String> parsedLinks = List.of("http://link1.com", "http://link2.com");
 
-        vacancyDBDao.write(parsedLinks, resourceId);
+        vacancyDBDao.write(parsedLinks, RESOURCE_ID);
 
         List<String> actual = vacancyDBDao.read("testResource");
 
@@ -41,9 +41,9 @@ public class VacancyDBDaoTest {
     @Test
     void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
         List<String> expectedLinks = List.of("http://link1.com", "http://link2.com");
-        vacancyDBDao.write(expectedLinks, resourceId);
+        vacancyDBDao.write(expectedLinks, RESOURCE_ID);
 
-        List<String> actualLinks = vacancyDBDao.read(resourceId);
+        List<String> actualLinks = vacancyDBDao.read(RESOURCE_ID);
 
         assertEquals(expectedLinks, actualLinks);
     }

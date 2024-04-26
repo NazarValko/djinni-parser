@@ -104,8 +104,8 @@ public class ParserServiceImpl implements ParserService {
      * @return unique list of data
      */
     private List<String> getNewVacancies(List<String> parsedData, String resourceId) {
-        List<String> dataFromFile = vacancyDaoImpl.read(resourceId);
-        List<String> newData = filterData(parsedData, dataFromFile);
+        List<String> dataFromSource = vacancyDaoImpl.read(resourceId);
+        List<String> newData = filterData(parsedData, dataFromSource);
 
         if (!newData.isEmpty()) {
             try {
