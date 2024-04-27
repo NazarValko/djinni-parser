@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 public class VacancyDBDaoTest {
 
-    private final String RESOURCE_ID = "testResource";
+    private static final String RESOURCE_ID = "testResource";
 
     @Autowired
     private VacancyDBDao vacancyDBDao;
