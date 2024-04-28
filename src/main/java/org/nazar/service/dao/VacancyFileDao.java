@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
-import org.nazar.service.notification.strategy.EmailStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class VacancyFileDao implements VacancyDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(VacancyFileDao.class);
 
     /**
      * Writes data represented in list of strings to file in data directory
