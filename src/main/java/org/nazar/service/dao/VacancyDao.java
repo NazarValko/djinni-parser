@@ -1,6 +1,7 @@
 package org.nazar.service.dao;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,4 +24,13 @@ public interface VacancyDao {
      * @return return parsed links from source
      */
     List<String> read(String resourceId);
+
+    /**
+     * Converts string of links to list of links
+     * @param result string of links
+     * @return list
+     */
+    default List<String> convertStringToList(String result) {
+        return result != null ? Arrays.stream(result.substring(1, result.length()-1).split(",\\s*")).toList() : List.of();
+    }
 }

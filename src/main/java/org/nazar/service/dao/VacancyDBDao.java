@@ -1,10 +1,9 @@
 package org.nazar.service.dao;
 
-import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Class for managing data from user using h2 database
  */
 @Component
-@Primary
+@ConditionalOnProperty(name = "vacancydao.type", havingValue = "db")
 public class VacancyDBDao implements VacancyDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -66,7 +65,7 @@ public class VacancyDBDao implements VacancyDao {
         String sql = "SELECT link FROM parsers_links WHERE FK_provider_id = (SELECT id FROM link_providers WHERE name = ?)";
         try {
             String result = jdbcTemplate.query(sql, rs -> rs.next() ? rs.getString("link") : null, resourceId);
-            return result != null ? Arrays.stream(result.substring(1, result.length()-1).split(",\\s*")).toList() : List.of();
+            return convertStringToList(result);
         } catch (DataAccessException e) {
             logger.error("Cannot execute sql query", e);
             return List.of();
