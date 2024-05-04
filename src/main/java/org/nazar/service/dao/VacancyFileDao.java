@@ -9,12 +9,14 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
  * Utility class for managing response data from parser
  */
 @Component
+@ConditionalOnProperty(name = "vacancydao.type", havingValue = "file")
 public class VacancyFileDao implements VacancyDao {
 
     private static final Logger logger = LoggerFactory.getLogger(VacancyFileDao.class);
