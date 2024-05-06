@@ -27,10 +27,10 @@ public interface VacancyDao {
 
     /**
      * Converts string of links to list of links
-     * @param result string of links
+     * @param links string of links
      * @return list
      */
-    default List<String> convertStringToList(String result) {
-        return result != null ? Arrays.stream(result.substring(1, result.length()-1).split(",\\s*")).toList() : List.of();
+    default List<String> convertStringToList(String links) {
+        return links != null ? Arrays.stream(links.substring(1, links.length()-1).split(",\\s*")).toList() : List.of();
     }
 }

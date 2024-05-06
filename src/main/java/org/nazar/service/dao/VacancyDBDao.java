@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Class for managing data from user using h2 database
  */
 @Component
-@ConditionalOnProperty(name = "vacancydao.type", havingValue = "db")
+@ConditionalOnProperty(name = "dao.type", havingValue = "db")
 public class VacancyDBDao implements VacancyDao {
 
     private final JdbcTemplate jdbcTemplate;
