@@ -7,21 +7,21 @@ import org.nazar.service.entities.ParsersLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @ConditionalOnProperty(name = "dao.type", havingValue = "jpa-repository")
-public class VacancyJpaRepositoryImpl implements VacancyDao {
+public class VacancyJpaService implements VacancyDao {
 
     private final LinkProviderJpaRepository linkProviderJpaRepository;
 
     private final ParsersLinkJpaRepository parsersLinkJpaRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(VacancyJpaRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(VacancyJpaService.class);
 
 
-    public VacancyJpaRepositoryImpl(LinkProviderJpaRepository linkProviderJpaRepository,
-                                    ParsersLinkJpaRepository parsersLinkJpaRepository) {
+    public VacancyJpaService(LinkProviderJpaRepository linkProviderJpaRepository,
+                             ParsersLinkJpaRepository parsersLinkJpaRepository) {
         this.linkProviderJpaRepository = linkProviderJpaRepository;
         this.parsersLinkJpaRepository = parsersLinkJpaRepository;
     }

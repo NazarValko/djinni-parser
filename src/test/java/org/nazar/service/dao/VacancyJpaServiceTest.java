@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest("dao.type=jpa")
 @ActiveProfiles("test")
-public class VacancyJpaRepositoryImplTest {
+public class VacancyJpaServiceTest {
     @Autowired
     private VacancyDao vacancyJpaRepository;
 

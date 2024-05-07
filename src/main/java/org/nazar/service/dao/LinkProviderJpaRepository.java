@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LinkProviderJpaRepository extends JpaRepository<LinkProvider, Integer> {
+public interface LinkProviderJpaRepository extends JpaRepository<LinkProvider, Long> {
     Optional<LinkProvider> findByName(String name);
 }
