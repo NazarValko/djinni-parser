@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * Utility class for managing response data from parser
  */
 @Component
-@ConditionalOnProperty(name = "vacancydao.type", havingValue = "file")
+@ConditionalOnProperty(name = "dao.type", havingValue = "file")
 public class VacancyFileDao implements VacancyDao {
 
     private static final Logger logger = LoggerFactory.getLogger(VacancyFileDao.class);

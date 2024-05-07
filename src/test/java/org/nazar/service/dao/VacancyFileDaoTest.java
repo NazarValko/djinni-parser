@@ -1,6 +1,8 @@
 package org.nazar.service.dao;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +25,10 @@ public class VacancyFileDaoTest {
      * Create file for testing
      */
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        Method method = VacancyFileDao.class.getDeclaredMethod("createDirectoryIfNotExists", Path.class);
+        method.setAccessible(true);
+        method.invoke(new VacancyFileDao(), TEST_FILE_PATH);
         List<String> initialContent = List.of("Data1", "Data2");
         try {
             Files.write(TEST_FILE_PATH, initialContent);
@@ -40,6 +45,7 @@ public class VacancyFileDaoTest {
     @AfterEach
     public void tearDown() throws IOException {
         Files.deleteIfExists(TEST_FILE_PATH);
+        Files.deleteIfExists(Path.of("src/main/resources/parsedLinks/nonExistentFile.txt"));
     }
 
     /**
@@ -75,7 +81,7 @@ public class VacancyFileDaoTest {
      */
     @Test
     void readDataTest_IfFail_ThenEmptyListShouldBeReturned() {
-        String nonExistentFilePath = "src/test/resources/nonExistentFile.txt";
+        String nonExistentFilePath = "nonExistentFile";
         VacancyFileDao vacancyFileDao = new VacancyFileDao();
         List<String> actual = vacancyFileDao.read(nonExistentFilePath);
         assertTrue(actual.isEmpty());

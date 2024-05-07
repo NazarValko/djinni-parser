@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@ConditionalOnProperty(name = "vacancydao.type", havingValue = "jpa")
+@ConditionalOnProperty(name = "dao.type", havingValue = "jpa")
 public class VacancyJpaDao implements VacancyDao {
     @PersistenceContext
     private EntityManager entityManager;

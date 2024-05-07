@@ -1,5 +1,7 @@
 package org.nazar.service.dao;
 
+import java.io.IOException;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.nazar.service.notification.bot.VacancyBot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,61 +9,51 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.IOException;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Tests for write and read links from database
- */
-@SpringBootTest(value = "dao.type=db")
+@SpringBootTest("dao.type=jpa")
 @ActiveProfiles("test")
-public class VacancyDBDaoTest {
+public class VacancyJpaServiceTest {
+    @Autowired
+    private VacancyDao vacancyJpaRepository;
 
     private static final String RESOURCE_ID = "testResource";
 
-    @Autowired
-    private VacancyDao vacancyDBDao;
-
     @MockBean
     private VacancyBot vacancyBot;
-
     /**
-     * Tests write links of ok then it should be in database
+     * Test that links are written to the database correctly
      */
     @Test
     void writeDataTest_IfSucceed_ThenDataShouldBeWritten() throws IOException {
         List<String> parsedLinks = List.of("http://link1.com", "http://link2.com");
 
-        vacancyDBDao.write(parsedLinks, RESOURCE_ID);
+        vacancyJpaRepository.write(parsedLinks, RESOURCE_ID);
 
-        List<String> actual = vacancyDBDao.read("testResource");
-
+        List<String> actual = vacancyJpaRepository.read(RESOURCE_ID);
         assertEquals(parsedLinks, actual);
     }
 
     /**
-     * Tests read links if success links should be returned
+     * Test that links are read from the database correctly
      */
     @Test
-    void readDataTest_IfSucceed_ThenDataShouldBeReturned() throws IOException {
+    void readDataTest_IfSucceed_ThenDataShouldBeReturned() {
         List<String> expectedLinks = List.of("http://link1.com", "http://link2.com");
-        vacancyDBDao.write(expectedLinks, RESOURCE_ID);
 
-        List<String> actualLinks = vacancyDBDao.read(RESOURCE_ID);
+        List<String> actualLinks = vacancyJpaRepository.read(RESOURCE_ID);
 
         assertEquals(expectedLinks, actualLinks);
     }
 
     /**
-     * Tests read links if provider is not exist empty list should be returned
+     * Test that reading non-existing links returns an empty list
      */
     @Test
     void readDataTest_IfFail_ThenEmptyListShouldBeReturned() {
         String resourceId = "nonExistentResource";
-        List<String> result = vacancyDBDao.read(resourceId);
+        List<String> result = vacancyJpaRepository.read(resourceId);
         assertTrue(result.isEmpty());
     }
 }

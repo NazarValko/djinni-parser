@@ -3,77 +3,73 @@ package org.nazar.service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.nazar.ParserApplication;
+import org.nazar.service.dao.VacancyDao;
+import org.nazar.service.notification.bot.VacancyBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest("dao.type=jpa")
+@ContextConfiguration(classes = ParserApplication.class)
+@ActiveProfiles("test")
 public class ParserServiceImplTest {
 
     @Autowired
     private ParserService parserService;
 
+    @MockBean
+    private VacancyDao vacancyDaoImpl;
+
+    @MockBean
+    private VacancyBot vacancyBot;
+
     /**
-     * Tests whether new data will be added to file
-     *
-     * @throws IOException when occurs
+     * Tests whether new data will be added and returned correctly
      */
     @Test
     void getNewVacanciesTest_IfSucceed_ThenNewDataShouldBeAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
-        Files.createDirectories(temp.getParent());
-
-        List<String> initialFileContent = List.of("Data1", "Data2");
-        Files.write(temp, initialFileContent);
-
+        List<String> existingData = List.of("Data1", "Data2");
         List<String> parsedData = List.of("Data1", "Data3", "Data6");
+
+        when(vacancyDaoImpl.read("testData")).thenReturn(existingData);
+        doNothing().when(vacancyDaoImpl).write(anyList(), eq("testData"));
 
         Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
         List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");
+
         List<String> expectedNewData = List.of("Data3", "Data6");
+
         assertEquals(expectedNewData, newData);
-
-        List<String> expectedFileContent = List.of("Data1", "Data2", "Data3", "Data6");
-        List<String> actualFileContent = Files.readAllLines(temp);
-        assertEquals(expectedFileContent, actualFileContent);
-
-        Files.deleteIfExists(temp);
     }
 
     /**
-     * Tests that data should not be added when file is not exists
-     *
-     * @throws IOException when occurs
+     * Tests that no new data is added or returned when no new items are found
      */
     @Test
-    void getNewVacanciesTest_IfFail_ThenDataIsNotAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Path temp = Paths.get("src/main/resources/parsedLinks/testData.txt");
-        Files.createDirectories(temp.getParent());
-
-        List<String> initialFileContent = List.of("Data1", "Data2");
-        Files.write(temp, initialFileContent);
-
+    void getNewVacanciesTest_IfFail_ThenNoNewDataShouldBeAdded() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        List<String> existingData = List.of("Data1", "Data2");
         List<String> parsedData = List.of("Data1", "Data2");
+
+        when(vacancyDaoImpl.read("testData")).thenReturn(existingData);
+        doNothing().when(vacancyDaoImpl).write(anyList(), eq("testData"));
 
         Method method = ParserServiceImpl.class.getDeclaredMethod("getNewVacancies", List.class, String.class);
         method.setAccessible(true);
         List<String> newData = (List<String>) method.invoke(parserService, parsedData, "testData");
 
         assertTrue(newData.isEmpty());
-
-        List<String> expectedFileContent = List.of("Data1", "Data2");
-        List<String> actualFileContent = Files.readAllLines(temp);
-        assertEquals(expectedFileContent, actualFileContent);
-
-        Files.deleteIfExists(temp);
     }
-
 }
