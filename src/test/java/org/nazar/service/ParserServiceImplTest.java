@@ -5,11 +5,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.nazar.ParserApplication;
 import org.nazar.service.dao.VacancyDao;
+import org.nazar.service.notification.bot.VacancyBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +21,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest("dao.type=jpa")
+@ContextConfiguration(classes = ParserApplication.class)
 @ActiveProfiles("test")
 public class ParserServiceImplTest {
 
@@ -27,6 +31,9 @@ public class ParserServiceImplTest {
 
     @MockBean
     private VacancyDao vacancyDaoImpl;
+
+    @MockBean
+    private VacancyBot vacancyBot;
 
     /**
      * Tests whether new data will be added and returned correctly
